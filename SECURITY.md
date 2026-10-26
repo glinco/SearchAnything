@@ -1,19 +1,19 @@
 # Security
 
-SearchAnything reads your screen, so you should be able to trust it with whatever is on it. This page explains what the app can and can't touch, how releases are built, how to check a download yourself, and how to report a problem.
+SearchAnything reads your screen, so you should be able to trust it with whatever is on it. This page explains what the app can and can't touch, how the code is checked, how to build it yourself with confidence, and how to report a problem.
 
-**In short:** SearchAnything has no network code, never writes screenshots to disk, runs without administrator rights, and has no third-party runtime dependencies. Releases are built in GitHub Actions straight from this repository, with a signed provenance record you can verify.
+**In short:** SearchAnything has no network code, never writes screenshots to disk, runs without administrator rights, and has no third-party runtime dependencies. There are no prebuilt downloads: you build it yourself from the source in this repository, so what runs is exactly what you can read.
 
 ## Reporting a vulnerability
 
 Please **don't open a public issue** for a security problem. Report it privately through [GitHub's private vulnerability reporting](../../security/advisories/new) on this repository.
 
-Include what you found, how to reproduce it, and the version (shown in the `.exe` file properties). You should get a reply within 7 days. Fixes ship in a new release, and the advisory is published once users can update.
+Include what you found, how to reproduce it, and the commit you built from (`git rev-parse --short HEAD`). You should get a reply within 7 days. Fixes land on the `main` branch, and the advisory is published once the fix is there.
 
-| Version | Supported |
+| Code | Supported |
 |---|---|
-| Latest release | Yes |
-| Older releases | No, please update |
+| Latest commit on `main` | Yes |
+| Older commits | No, please pull and rebuild |
 
 ## What the app can access
 
@@ -45,53 +45,40 @@ flowchart LR
 
 The only exception to "nothing on disk" is a developer tool. `SearchAnything.exe --selftest report.txt image.png` reads **an image file you give it** (never your screen) and writes its text to a **new** report file. It refuses to overwrite an existing file.
 
-## How releases are built
+## How the code is checked
 
 ```mermaid
 flowchart TD
-    Tag["Maintainer pushes a version tag (v1.2.3)"] --> Build
-    subgraph Build["Build job (read-only access to the repo)"]
-        Checkout["Check out the tagged source"] --> Test["Run the unit tests"]
-        Test --> Publish["Build win-x64 and win-arm64 .exe files"]
-        Publish --> Sums["Compute SHA-256 checksums"]
+    Change["Pull request or push to main"] --> CI
+    subgraph CI["CI job (read-only access to the repo)"]
+        Checkout["Check out the source"] --> Restore["Restore packages from nuget.org only"]
+        Restore --> Test["Build and run the unit tests"]
     end
-    Build --> Gate{"'release' environment:<br/>maintainer approval"}
-    Gate --> Release
-    subgraph Release["Publish job (the only job that can write)"]
-        Attest["Sign a build provenance attestation (Sigstore)"] --> GH["Create the GitHub Release"]
-    end
-    GH --> You["You download and verify"]
+    Bot["Dependabot"] -->|"weekly update PRs"| Change
+    CI --> Main["main branch"]
+    Main --> Clone["You clone github.com/glinco/SearchAnything"]
+    Clone --> Build["You build the .exe on your PC"]
 ```
 
-- **Built from source you can read.** Every release is built by [`.github/workflows/release.yml`](.github/workflows/release.yml) from the tagged commit. No one uploads binaries by hand.
-- **Least-privilege CI.** Workflows default to read-only tokens. Tests and build tools run without permission to change the repository or its releases. Only the final publish step can write, and only after approval.
+- **No binaries to trust.** This project publishes no `.exe`, zip or installer. The only official source is [github.com/glinco/SearchAnything](https://github.com/glinco/SearchAnything). A SearchAnything download found anywhere else was not made by this project.
+- **Least-privilege CI.** The CI workflow ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs with a read-only token and keeps no credentials after checkout. It can't change the repository.
 - **Pinned tooling.** Every GitHub Action is pinned to a full commit SHA, so a moved tag upstream can't change what runs. NuGet packages come only from nuget.org (`nuget.config` clears every other source) at exact versions. Dependabot proposes updates as reviewable pull requests.
 - **Tiny dependency surface.** The app uses only .NET and Windows APIs. The only NuGet packages are test tools (xUnit and the .NET test SDK), and they are not part of the `.exe`.
 
-## Verify your download
+## Build it yourself
 
-Pick whichever you're comfortable with. Each one is enough on its own.
-
-**1. Check the build provenance (strongest).** It proves the file was built by this repository's release workflow from a specific commit. With the [GitHub CLI](https://cli.github.com/):
+You need Windows 10 (2004) or 11 and the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0), from Microsoft's site.
 
 ```powershell
-gh attestation verify SearchAnything-win-x64.exe --repo glinco/SearchAnything
-```
-
-**2. Compare the checksum.** In PowerShell, compare the output with the matching line in `SHA256SUMS.txt` from the same release:
-
-```powershell
-(Get-FileHash .\SearchAnything-win-x64.exe -Algorithm SHA256).Hash.ToLower()
-```
-
-The checksum file sits next to the `.exe` on the release page. It catches a corrupted download, but someone who could replace one file could replace both. That's why the attestation above is the stronger check.
-
-**3. Build it yourself.** With the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0):
-
-```powershell
+git clone https://github.com/glinco/SearchAnything.git
+cd SearchAnything
 dotnet test SearchAnything.slnx
 dotnet publish src/SearchAnything -c Release -r win-x64 -o publish
 ```
+
+Use `-r win-arm64` on ARM PCs. The app is `publish\SearchAnything.exe`. Because you built it, Windows SmartScreen has no download to warn about.
+
+Before building, you can see exactly what changed since you last looked with `git log` and `git diff`.
 
 ### Check that it stays offline
 
@@ -107,8 +94,7 @@ These are known and accepted. We list them so you can judge the risk yourself.
 
 | Limitation | What it means for you | Plan |
 |---|---|---|
-| The `.exe` is not code-signed yet | Windows SmartScreen warns on first run. Use the provenance check above to know the file is genuine. | Code signing is planned. |
-| The single-file `.exe` unpacks a few Windows/.NET DLLs to `%TEMP%\.net\SearchAnything\` | Another program running as **you** could tamper with them. Such a program could already read your screen, so this adds no new access. | Consider an unpacked zip release. |
+| The single-file `.exe` unpacks a few Windows/.NET DLLs to `%TEMP%\.net\SearchAnything\` | Another program running as **you** could tamper with them. Such a program could already read your screen, so this adds no new access. | To avoid it, publish with `-p:PublishSingleFile=false` and run the `.exe` from the `publish` folder. |
 | Anything you copy is plain text in the clipboard | The app you paste into receives the text, as with any copy. | By design. |
 | The overlay shows a frozen image of your screen | Anyone looking at your screen sees what you already had on it. It closes as soon as you click away. | By design. |
 
@@ -118,8 +104,8 @@ The codebase had a full manual security review on 2026-10-26. It found no critic
 
 | ID | Finding | Severity | Status |
 |---|---|---|---|
-| M1 | Release workflow trusted mutable action tags with a write token | Medium | Fixed: SHA-pinned actions, read-only build job, approval-gated publish job |
-| M2 | Unsigned binaries; checksums from the same place as the binaries | Medium | Partly fixed: signed provenance attestations; code signing planned |
+| M1 | Release workflow trusted mutable action tags with a write token | Medium | Resolved: release workflow removed; CI is SHA-pinned and read-only |
+| M2 | Unsigned binaries; checksums from the same place as the binaries | Medium | Resolved: no binaries are distributed; users build from source |
 | L1 | Self-test mode could save live screen text to any file | Low | Fixed: image input only, never overwrites |
 | L2 | Copied text went into clipboard history and cloud sync | Low | Fixed |
 | L3 | Single-instance names could be taken by other programs | Low | Fixed: session- and user-scoped names, rate-limited notices |
@@ -127,7 +113,7 @@ The codebase had a full manual security review on 2026-10-26. It found no critic
 | L5 | CI token scope and dependency updates unmanaged | Low | Fixed: read-only CI, Dependabot |
 | I1 | Raw exception messages shown to users | Info | Fixed |
 | I2 | Screenshots stayed in memory after closing | Info | Fixed: pixels wiped on close |
-| I3 | Release builds embed debug symbols | Info | Accepted: helps crash reports, no secrets in an open-source build |
+| I3 | Release builds embed debug symbols | Info | Accepted: helps crash reports, and the build happens on your own PC |
 
 ## For contributors
 

@@ -9,20 +9,11 @@ Press **Ctrl+Alt+F**. Your screen freezes, you type, and every match lights up.
 - **Free and lightweight.** It uses the text recognition built into Windows, so there are no AI models to download.
 - **Multilingual.** Searches ignore accents and capital letters, so `accion` finds `Acción`. Every OCR language installed on your PC reads the screen at once, and their results are combined.
 
-Want to check these claims, or verify a download? See [SECURITY.md](SECURITY.md).
+Want to check these claims? See [SECURITY.md](SECURITY.md).
 
-## Download
+## Get it
 
-Get the latest `.exe` from the [Releases page](../../releases/latest):
-
-| Your PC | File |
-|---|---|
-| Most Windows PCs (Intel / AMD) | `SearchAnything-win-x64.exe` |
-| ARM PCs (Snapdragon / Surface Pro X) | `SearchAnything-win-arm64.exe` |
-
-There's nothing to install. Run it and it waits in the system tray (the yellow magnifying glass).
-
-> **"Windows protected your PC"?** The app isn't code-signed yet, so Windows SmartScreen warns about any new download. Click **More info → Run anyway**. You can check that the file was built from this repository by GitHub Actions with `gh attestation verify SearchAnything-win-x64.exe --repo glinco/SearchAnything`, compare it with `SHA256SUMS.txt` on the release page, or build it yourself from this source code.
+There are no prebuilt downloads. You build SearchAnything yourself from this source code, so you know exactly what runs on your PC. It takes about a minute: see [Build from source](#build-from-source).
 
 **Requirements:** Windows 10 (version 2004) or Windows 11, with at least one Windows language that includes text recognition. English and Spanish usually do.
 
@@ -83,11 +74,13 @@ dotnet test SearchAnything.slnx
 dotnet run --project src/SearchAnything
 ```
 
-To build the single-file download yourself:
+To build a single `.exe` you can keep and run anywhere (use `-r win-arm64` on ARM PCs such as Snapdragon or Surface Pro X):
 
 ```bash
 dotnet publish src/SearchAnything -c Release -r win-x64 -o publish
 ```
+
+There's nothing to install. Run `publish\SearchAnything.exe` and it waits in the system tray (the yellow magnifying glass).
 
 Developer self-test, which runs OCR on an image and writes timings, the recognized text and matches to a new file (it never reads your screen, and it won't overwrite an existing file):
 
