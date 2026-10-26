@@ -1,6 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
 
+// Load native DLLs only from System32, never from the folder the .exe was downloaded to.
+[assembly: DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+
 namespace SearchAnything;
 
 internal static class NativeMethods
