@@ -64,6 +64,7 @@ public partial class OverlayWindow : Window
         };
         Deactivated += (_, _) => SafeClose();
         Closing += (_, _) => _closing = true;
+        Closed += (_, _) => ForgetScreenshot();
         PreviewKeyDown += OnKey;
     }
 
@@ -82,6 +83,9 @@ public partial class OverlayWindow : Window
         {
             // Every language engine reads the same screenshot in parallel.
             var readings = await Task.WhenAll(_ocr.Select(engine => engine.RecognizeAsync(_shot, OcrScale)));
+            // Closed while reading: the screenshot is already wiped, so don't keep its text either.
+            if (_closing)
+                return;
             _index = new CombinedIndex(readings);
         }
         catch (Exception ex)
@@ -253,6 +257,15 @@ public partial class OverlayWindow : Window
     }
 
     private static MemoryStream DwordZero() => new(BitConverter.GetBytes(0));
+
+    /// <summary>Wipes the captured pixels and OCR text, so they don't linger in memory (or a crash dump).</summary>
+    private void ForgetScreenshot()
+    {
+        Shot.Source = null;
+        Array.Clear(_shot.Pixels);
+        _index = null;
+        _matches = new();
+    }
 
     private Rect Pad(Rect box)
     {
