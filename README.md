@@ -9,6 +9,8 @@ Press **Ctrl+Alt+F**. Your screen freezes, you type, and every match lights up.
 - **Free and lightweight.** It uses the text recognition built into Windows, so there are no AI models to download.
 - **Multilingual.** Searches ignore accents and capital letters, so `accion` finds `Acción`. Every OCR language installed on your PC reads the screen at once, and their results are combined.
 
+Want to check these claims, or verify a download? See [SECURITY.md](SECURITY.md).
+
 ## Download
 
 Get the latest `.exe` from the [Releases page](../../releases/latest):
@@ -20,7 +22,7 @@ Get the latest `.exe` from the [Releases page](../../releases/latest):
 
 There's nothing to install. Run it and it waits in the system tray (the yellow magnifying glass).
 
-> **"Windows protected your PC"?** The app isn't code-signed yet, so Windows SmartScreen warns about any new download. Click **More info → Run anyway**. You can check the file against `SHA256SUMS.txt` on the release page, or build it yourself from this source code.
+> **"Windows protected your PC"?** The app isn't code-signed yet, so Windows SmartScreen warns about any new download. Click **More info → Run anyway**. You can check that the file was built from this repository by GitHub Actions with `gh attestation verify SearchAnything-win-x64.exe --repo <owner>/SearchAnything`, compare it with `SHA256SUMS.txt` on the release page, or build it yourself from this source code.
 
 **Requirements:** Windows 10 (version 2004) or Windows 11, with at least one Windows language that includes text recognition. English and Spanish usually do.
 
@@ -61,7 +63,7 @@ Ctrl+Alt+F ─► screenshot of the monitor under the mouse
 | [`OverlayWindow.xaml(.cs)`](src/SearchAnything/OverlayWindow.xaml.cs) | The full-screen search UI |
 | [`TrayIcon.cs`](src/SearchAnything/TrayIcon.cs), [`HotkeyDialog.xaml(.cs)`](src/SearchAnything/HotkeyDialog.xaml.cs), [`Settings.cs`](src/SearchAnything/Settings.cs) | Tray menu, shortcut picker, saved settings |
 
-The only thing written to disk is your shortcut, in `%APPDATA%\SearchAnything\settings.json`. "Start with Windows" adds a value under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+The only thing written to disk is your shortcut, in `%APPDATA%\SearchAnything\settings.json`. "Start with Windows" adds a value under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`. Text you copy from a search is kept out of Windows clipboard history and the cloud clipboard.
 
 ## Known limitations
 
@@ -87,10 +89,10 @@ To build the single-file download yourself:
 dotnet publish src/SearchAnything -c Release -r win-x64 -o publish
 ```
 
-Developer self-test, which runs OCR on an image (or your screen) and writes timings and matches to a file:
+Developer self-test, which runs OCR on an image and writes timings, the recognized text and matches to a new file (it never reads your screen, and it won't overwrite an existing file):
 
 ```bash
-SearchAnything.exe --selftest report.txt [image.png] [query]
+SearchAnything.exe --selftest report.txt image.png [query]
 ```
 
 ## Roadmap

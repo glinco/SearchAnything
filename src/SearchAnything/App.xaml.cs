@@ -29,10 +29,13 @@ public partial class App : Application
     {
         base.OnStartup(e);
 
-        // SearchAnything.exe --selftest <output.txt> [image.png] [query]
-        if (e.Args.Length >= 2 && e.Args[0] == "--selftest")
+        // SearchAnything.exe --selftest <output.txt> <image.png> [query]
+        if (e.Args.Length >= 1 && e.Args[0] == "--selftest")
         {
-            _ = RunSelfTestAsync(e.Args);
+            if (e.Args.Length >= 3 && File.Exists(e.Args[2]))
+                _ = RunSelfTestAsync(e.Args);
+            else
+                Shutdown(2);
             return;
         }
 
@@ -166,12 +169,18 @@ public partial class App : Application
 
     private async Task RunSelfTestAsync(string[] args)
     {
+        // The report holds every word the OCR read, so never replace an existing file with it.
+        if (File.Exists(args[1]))
+        {
+            Shutdown(1);
+            return;
+        }
+
         var report = new StringBuilder();
         try
         {
-            var shot = args.Length >= 3 && File.Exists(args[2])
-                ? ScreenCapture.Load(args[2])
-                : ScreenCapture.Grab(ScreenCapture.MonitorUnderCursor());
+            // Only an image the developer chose: the self-test never reads the live screen.
+            var shot = ScreenCapture.Load(args[2]);
             string? query = args.Length >= 4 ? args[3] : null;
             report.AppendLine($"Image: {shot.Width}x{shot.Height}");
 
@@ -208,7 +217,16 @@ public partial class App : Application
         {
             report.AppendLine("ERROR: " + ex);
         }
-        File.WriteAllText(args[1], report.ToString());
+        try
+        {
+            using var output = new FileStream(args[1], FileMode.CreateNew, FileAccess.Write);
+            using var writer = new StreamWriter(output);
+            writer.Write(report.ToString());
+        }
+        catch (IOException)
+        {
+            // The file appeared since the check above; leave it alone.
+        }
         Shutdown();
     }
 
