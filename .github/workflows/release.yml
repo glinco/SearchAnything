@@ -1,0 +1,43 @@
+# Pushing a tag like v0.1.0 builds the downloads and publishes them as a GitHub Release.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Test
+        run: dotnet test SearchAnything.slnx -c Release
+
+      - name: Build single-file downloads
+        shell: pwsh
+        run: |
+          $version = $env:GITHUB_REF_NAME.TrimStart('v')
+          foreach ($rid in 'win-x64', 'win-arm64') {
+            dotnet publish src/SearchAnything/SearchAnything.csproj -c Release -r $rid -p:Version=$version -o "publish/$rid"
+            Copy-Item "publish/$rid/SearchAnything.exe" "SearchAnything-$rid.exe"
+          }
+          Get-FileHash SearchAnything-*.exe -Algorithm SHA256 |
+            ForEach-Object { "$($_.Hash.ToLower())  $(Split-Path $_.Path -Leaf)" } |
+            Set-Content SHA256SUMS.txt
+
+      - name: Publish release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          gh release create $env:GITHUB_REF_NAME
+          SearchAnything-win-x64.exe SearchAnything-win-arm64.exe SHA256SUMS.txt
+          --title "SearchAnything $env:GITHUB_REF_NAME"
+          --generate-notes
