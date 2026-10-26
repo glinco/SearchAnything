@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.IO;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,8 +13,14 @@ namespace SearchAnything;
 
 public partial class App : Application
 {
-    private const string SingleInstanceName = "SearchAnything.SingleInstance";
-    private const string AlreadyRunningSignalName = "SearchAnything.AlreadyRunning";
+    // Local\ keeps the names inside this logon session, and the user's SID keeps a program running
+    // as another account (for example through "Run as") from taking them first.
+    private static readonly string SingleInstanceName = $@"Local\SearchAnything.SingleInstance.{UserSid}";
+    private static readonly string AlreadyRunningSignalName = $@"Local\SearchAnything.AlreadyRunning.{UserSid}";
+    private static string UserSid => WindowsIdentity.GetCurrent().User?.Value ?? Environment.UserName;
+
+    /// <summary>A second launch more often than this just repeats the last "already running" notice.</summary>
+    private static readonly TimeSpan AlreadyRunningCooldown = TimeSpan.FromSeconds(5);
 
     private Mutex? _singleInstance;
     private EventWaitHandle? _alreadyRunningSignal;
@@ -24,6 +31,7 @@ public partial class App : Application
     private Settings _settings = new();
     private Hotkey _currentHotkey = Hotkey.Default;
     private string _lastQuery = "";
+    private DateTime _lastAlreadyRunningNotice = DateTime.MinValue;
 
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -151,11 +159,19 @@ public partial class App : Application
         _alreadyRunningSignal = new EventWaitHandle(false, EventResetMode.AutoReset, AlreadyRunningSignalName);
         ThreadPool.RegisterWaitForSingleObject(
             _alreadyRunningSignal,
-            (_, _) => Dispatcher.InvokeAsync(() =>
-                _tray?.Notify($"SearchAnything is already running. Press {_currentHotkey} to search your screen.")),
+            (_, _) => Dispatcher.InvokeAsync(NotifyAlreadyRunning),
             null,
             Timeout.Infinite,
             executeOnlyOnce: false);
+    }
+
+    private void NotifyAlreadyRunning()
+    {
+        // Any app can set this event, so don't let one flood the tray with balloons.
+        if (DateTime.UtcNow - _lastAlreadyRunningNotice < AlreadyRunningCooldown)
+            return;
+        _lastAlreadyRunningNotice = DateTime.UtcNow;
+        _tray?.Notify($"SearchAnything is already running. Press {_currentHotkey} to search your screen.");
     }
 
     private static void SignalRunningInstance()
