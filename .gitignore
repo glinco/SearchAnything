@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+*.exe
+
+# IDE files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Test results
+TestResults/
