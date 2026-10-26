@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SearchAnything Playground</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --card: #ffffff; --ink: #1d1d1f; --muted: #6b6b70; --line: #e3e3e0;
+    --accent: #ffbe00; --pass: #1f8a4c; --fail: #c62828;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #151517; --card: #1f1f22; --ink: #ececee; --muted: #9a9aa0; --line: #2e2e33; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 "Segoe UI", system-ui, sans-serif; }
+  .fixed { position: fixed; left: 0; right: 0; z-index: 5; text-align: center; padding: 6px 0;
+           background: var(--card); border-color: var(--line); border-style: solid; border-width: 0; }
+  .fixed canvas { display: inline-block; }
+  #top { top: 0; border-bottom-width: 1px; }
+  #bottom { bottom: 0; border-top-width: 1px; }
+  main { max-width: 1100px; margin: 0 auto; padding: 80px 16px 90px; display: grid; gap: 16px;
+         grid-template-columns: minmax(0, 1fr) 360px; align-items: start; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h2 { font-size: 15px; margin: 0 0 4px; }
+  p { margin: 0 0 10px; color: var(--muted); }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+  .try { font-size: 13px; color: var(--muted); margin-top: 8px; }
+  .try code { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--ink); }
+  canvas { max-width: 100%; display: block; }
+  .stack { display: grid; gap: 16px; }
+  aside { position: sticky; top: 72px; max-height: calc(100vh - 160px); overflow: auto; }
+  aside h2 { display: flex; justify-content: space-between; align-items: center; }
+  .group { margin: 12px 0 4px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+  label.item { display: flex; gap: 8px; padding: 4px 0; font-size: 13.5px; cursor: pointer; }
+  label.item input { margin-top: 3px; accent-color: var(--pass); }
+  label.item.done span { color: var(--muted); text-decoration: line-through; }
+  textarea { width: 100%; min-height: 90px; margin-top: 8px; padding: 8px; border-radius: 8px; border: 1px solid var(--line);
+             background: var(--bg); color: var(--ink); font: inherit; font-size: 13px; }
+  button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+           background: var(--bg); color: var(--ink); cursor: pointer; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: #1d1d1f; font-weight: 600; }
+  .row { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .count { font-size: 12px; color: var(--muted); font-weight: 400; }
+</style>
+</head>
+<body>
+
+<div class="fixed" id="top"><canvas id="c-top"></canvas></div>
+<div class="fixed" id="bottom"><canvas id="c-bottom"></canvas></div>
+
+<main>
+  <div class="stack">
+    <div class="card">
+      <h1>SearchAnything Playground</h1>
+      <p>Every sample below is drawn as a <strong>picture</strong>, so your browser's own Ctrl+F can't find any of it. Press
+        <strong>Ctrl+Alt+F</strong> and search with SearchAnything instead. Tick the checklist as you go, write down anything odd,
+        then use <em>Copy report</em> and paste it into the chat.</p>
+      <div class="try">First, prove the point: press <code>Ctrl+F</code> (the browser's search) and type <code>banana</code>. It finds nothing on these pictures.</div>
+    </div>
+
+    <div class="card">
+      <h2>1. Accents and capitals</h2>
+      <canvas id="c-accents"></canvas>
+      <div class="try">Try <code>accion</code>, <code>configuracion</code>, <code>nino</code>, <code>PINA</code>. All should match.</div>
+    </div>
+
+    <div class="card">
+      <h2>2. Matches that touch</h2>
+      <canvas id="c-touch"></canvas>
+      <div class="try">Try <code>an</code>. Look closely between the boxes: there should be <strong>no dark slivers</strong>.</div>
+    </div>
+
+    <div class="card">
+      <h2>3. A phrase split across two lines</h2>
+      <canvas id="c-wrap"></canvas>
+      <div class="try">Try <code>hola mundo</code>. You should get <strong>1 match with two boxes</strong>.</div>
+    </div>
+
+    <div class="card">
+      <h2>4. Small text</h2>
+      <canvas id="c-tiny"></canvas>
+      <div class="try">Try <code>tiny</code>. Note which sizes are found. Very small text failing is a known limit, but tell me where it stops working.</div>
+    </div>
+
+    <div class="card">
+      <h2>5. Colors and contrast</h2>
+      <canvas id="c-colors"></canvas>
+      <div class="try">Try <code>contrast</code>. Expect the low-contrast one might be missed.</div>
+    </div>
+
+    <div class="card">
+      <h2>6. Numbers, symbols, emails</h2>
+      <canvas id="c-symbols"></canvas>
+      <div class="try">Try <code>1,240.50</code>, <code>15/10/2026</code>, <code>user@example.com</code>, <code>A-1234</code>.</div>
+    </div>
+
+    <div class="card">
+      <h2>7. Many matches</h2>
+      <canvas id="c-many"></canvas>
+      <div class="try">Try <code>test</code>. Hold <code>Enter</code>: the counter should cycle smoothly and wrap from last to first. Try <code>Shift+Enter</code> and <code>F3</code> too.</div>
+    </div>
+
+    <div class="card">
+      <h2>8. Moving text (freeze test)</h2>
+      <canvas id="c-moving"></canvas>
+      <div class="try">The word keeps moving. Press Ctrl+Alt+F and search <code>moving</code>: the screen should freeze and the box should sit exactly on the word.</div>
+    </div>
+
+    <div class="card">
+      <h2>9. Rotated text and emoji (expected to fail)</h2>
+      <canvas id="c-hard"></canvas>
+      <div class="try">Try <code>rotated</code> and type an emoji like 🚀. These may show "No matches". That's fine; the app just must <strong>not break</strong>.</div>
+    </div>
+
+    <div class="card">
+      <h2>10. Top and bottom edges</h2>
+      <p>The bars pinned to the top and bottom of this page hold the words <code>TOPWORD</code> and <code>BOTTOMWORD</code>.</p>
+      <div class="try">With the browser maximized, search <code>topword</code>: the search bar should jump to the bottom so it doesn't cover the match. Then search <code>bottomword</code>: it should stay at, or come back to, the top.</div>
+    </div>
+  </div>
+
+  <aside class="card">
+    <h2>Checklist <span class="count" id="count"></span></h2>
+    <div id="checklist"></div>
+    <div class="group">Notes / issues found</div>
+    <textarea id="notes" placeholder="Anything odd: misaligned boxes, wrong counts, slow, crashes, confusing text…"></textarea>
+    <div class="row">
+      <button class="primary" id="copy">Copy report</button>
+      <button id="reset">Reset</button>
+    </div>
+  </aside>
+</main>
+
+<script>
+// ---------- Text drawn on canvases, invisible to the browser's Ctrl+F ----------
+const dark = matchMedia('(prefers-color-scheme: dark)').matches;
+const INK = dark ? '#ececee' : '#1d1d1f';
+const PAPER = dark ? '#1f1f22' : '#ffffff';
+
+function canvas(id, width, height, draw) {
+  const el = document.getElementById(id);
+  const ratio = window.devicePixelRatio || 1;
+  el.width = width * ratio; el.height = height * ratio;
+  el.style.width = width + 'px'; el.style.height = height + 'px';
+  const g = el.getContext('2d');
+  g.scale(ratio, ratio);
+  g.fillStyle = PAPER; g.fillRect(0, 0, width, height);
+  g.textBaseline = 'top';
+  draw(g, width, height);
+  return g;
+}
+const font = (size, family = 'Segoe UI', weight = '400') => `${weight} ${size}px "${family}"`;
+function text(g, s, x, y, size, color = INK, family, weight) {
+  g.font = font(size, family, weight); g.fillStyle = color; g.fillText(s, x, y);
+}
+
+canvas('c-top', 300, 30, g => text(g, 'TOPWORD', 90, 4, 20, INK, 'Segoe UI', '600'));
+canvas('c-bottom', 300, 30, g => text(g, 'BOTTOMWORD', 70, 4, 20, INK, 'Segoe UI', '600'));
+
+canvas('c-accents', 640, 120, g => {
+  text(g, 'Factura de compra — Acción requerida', 10, 10, 26);
+  text(g, 'CONFIGURACIÓN AVANZADA del sistema', 10, 50, 20);
+  text(g, 'El niño comió una piña en Bogotá.', 10, 84, 18);
+});
+
+canvas('c-touch', 640, 60, g => text(g, 'banana  ananas  bandana  cabana', 10, 12, 30));
+
+canvas('c-wrap', 320, 80, g => {
+  text(g, 'Le dijo al público: hola', 10, 10, 20);
+  text(g, 'mundo, y todos aplaudieron.', 10, 42, 20);
+});
+
+canvas('c-tiny', 640, 130, g => {
+  [8, 9, 10, 11, 12, 14, 16].forEach((size, i) => text(g, `tiny text sample at ${size}px`, 10, 6 + i * 17.5, size));
+});
+
+canvas('c-colors', 640, 150, g => {
+  const rows = [
+    ['#1d3b8a', '#ffffff', 'white on blue contrast'],
+    ['#222222', '#ffd54f', 'yellow on black contrast'],
+    ['#c62828', '#ffffff', 'white on red contrast'],
+    ['#e8e8e8', '#b9b9b9', 'low contrast gray text'],
+  ];
+  rows.forEach(([bg, fg, s], i) => {
+    g.fillStyle = bg; g.fillRect(10, 8 + i * 35, 400, 30);
+    text(g, s, 20, 13 + i * 35, 18, fg);
+  });
+});
+
+canvas('c-symbols', 640, 100, g => {
+  text(g, 'Invoice total: $1,240.50    Due: 15/10/2026', 10, 10, 20, INK, 'Consolas');
+  text(g, 'Contact: user@example.com    Ref: #A-1234', 10, 44, 20, INK, 'Consolas');
+});
+
+canvas('c-many', 640, 200, g => {
+  const words = ['test', 'text', 'best', 'test', 'rest', 'test', 'west', 'test'];
+  for (let row = 0; row < 10; row++)
+    for (let col = 0; col < 10; col++)
+      text(g, words[(row * 10 + col) % words.length], 10 + col * 62, 6 + row * 19, 14);
+});
+
+(() => {
+  const el = document.getElementById('c-moving');
+  const w = 640, h = 70, ratio = window.devicePixelRatio || 1;
+  el.width = w * ratio; el.height = h * ratio; el.style.width = w + 'px'; el.style.height = h + 'px';
+  const g = el.getContext('2d'); g.scale(ratio, ratio); g.textBaseline = 'top';
+  let t = 0;
+  (function frame() {
+    g.fillStyle = PAPER; g.fillRect(0, 0, w, h);
+    const x = 10 + (Math.sin(t / 40) + 1) * 220;
+    text(g, 'moving target', x, 20, 26, INK, 'Segoe UI', '600');
+    t++; requestAnimationFrame(frame);
+  })();
+})();
+
+canvas('c-hard', 640, 120, g => {
+  g.save(); g.translate(60, 100); g.rotate(-Math.PI / 6);
+  text(g, 'rotated words here', 0, 0, 22); g.restore();
+  text(g, '🚀 launch today 🔥', 330, 40, 24);
+});
+
+// ---------- Checklist (ticks and notes are kept in this browser only) ----------
+const CHECKS = {
+  'Startup': [
+    'Tray icon (yellow magnifier) appears with a "Running" notification',
+    'Launching the .exe a second time shows "already running"',
+  ],
+  'Open and close': [
+    'Ctrl+Alt+F opens the search on the monitor under the mouse',
+    'Ctrl+Alt+F again closes it',
+    'Esc closes it',
+    'Clicking the darkened screenshot closes it',
+    'Alt+Tab away closes it',
+    'Left-clicking the tray icon opens a search (menu not in the screenshot)',
+  ],
+  'Searching': [
+    'Highlights sit exactly on the words (not shifted)',
+    'Counter "X of Y" is right; "No matches" shows in red',
+    'Enter / Shift+Enter / F3 move between matches',
+    'Clicking a highlight makes it the current one (orange)',
+    'Search bar moves out of the way of the current match',
+    'Last search is pre-filled next time',
+  ],
+  'Copy': [
+    'Ctrl+C copies the line of the current match (paste in Notepad)',
+    'Ctrl+Shift+C copies all screen text',
+    'Ctrl+C with text selected in the search box copies just that',
+  ],
+  'Settings': [
+    'Change shortcut: new combo (e.g. Ctrl+Shift+Y) works right away',
+    'Change shortcut: plain "F" or "Shift+F" is refused',
+    'Change shortcut: Esc / Cancel keeps the old one',
+    'New shortcut is remembered after Exit and relaunch',
+    'Start with Windows: shows in Task Manager → Startup apps; unticking removes it',
+    'Exit removes the tray icon',
+  ],
+  'Real world': [
+    'A YouTube video (paused and playing)',
+    'An image in the Photos app',
+    'A scanned PDF or photo of a document',
+    'A dark-mode app (e.g. VS Code)',
+    'Display scaling 125% / 150%: highlights still aligned',
+    'Second monitor (if you have one)',
+  ],
+};
+const KEY = 'searchanything-playground';
+const load = () => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; } };
+const save = s => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} };
+let state = load(); state.done = state.done || {};
+
+const list = document.getElementById('checklist');
+const notes = document.getElementById('notes');
+notes.value = state.notes || '';
+notes.addEventListener('input', () => { state.notes = notes.value; save(state); });
+
+function render() {
+  list.innerHTML = '';
+  let total = 0, done = 0;
+  for (const [group, items] of Object.entries(CHECKS)) {
+    const h = document.createElement('div'); h.className = 'group'; h.textContent = group; list.append(h);
+    for (const item of items) {
+      total++; if (state.done[item]) done++;
+      const label = document.createElement('label'); label.className = 'item' + (state.done[item] ? ' done' : '');
+      const box = document.createElement('input'); box.type = 'checkbox'; box.checked = !!state.done[item];
+      box.addEventListener('change', () => { state.done[item] = box.checked; save(state); render(); });
+      const span = document.createElement('span'); span.textContent = item;
+      label.append(box, span); list.append(label);
+    }
+  }
+  document.getElementById('count').textContent = `${done} / ${total}`;
+}
+render();
+
+document.getElementById('copy').addEventListener('click', async () => {
+  const lines = ['SearchAnything test report', ''];
+  for (const [group, items] of Object.entries(CHECKS)) {
+    lines.push(group + ':');
+    for (const item of items) lines.push(`  [${state.done[item] ? 'x' : ' '}] ${item}`);
+  }
+  lines.push('', 'Notes:', notes.value || '(none)');
+  const report = lines.join('\n');
+  const button = document.getElementById('copy');
+  try { await navigator.clipboard.writeText(report); button.textContent = 'Copied!'; }
+  catch { notes.value = report; notes.select(); button.textContent = 'Select-all + copy the box'; }
+  setTimeout(() => (button.textContent = 'Copy report'), 2000);
+});
+document.getElementById('reset').addEventListener('click', () => {
+  state = { done: {} }; notes.value = ''; save(state); render();
+});
+</script>
+</body>
+</html>
