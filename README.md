@@ -22,7 +22,7 @@ Get the latest `.exe` from the [Releases page](../../releases/latest):
 
 There's nothing to install. Run it and it waits in the system tray (the yellow magnifying glass).
 
-> **"Windows protected your PC"?** The app isn't code-signed yet, so Windows SmartScreen warns about any new download. Click **More info → Run anyway**. You can check that the file was built from this repository by GitHub Actions with `gh attestation verify SearchAnything-win-x64.exe --repo <owner>/SearchAnything`, compare it with `SHA256SUMS.txt` on the release page, or build it yourself from this source code.
+> **"Windows protected your PC"?** The app isn't code-signed yet, so Windows SmartScreen warns about any new download. Click **More info → Run anyway**. You can check that the file was built from this repository by GitHub Actions with `gh attestation verify SearchAnything-win-x64.exe --repo glinco/SearchAnything`, compare it with `SHA256SUMS.txt` on the release page, or build it yourself from this source code.
 
 **Requirements:** Windows 10 (version 2004) or Windows 11, with at least one Windows language that includes text recognition. English and Spanish usually do.
 
