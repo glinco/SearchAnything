@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
@@ -236,7 +237,13 @@ public partial class OverlayWindow : Window
     {
         try
         {
-            Clipboard.SetText(text);
+            // Screen text can include passwords or personal data, so keep it out of the Win+V
+            // clipboard history and off the cloud clipboard that syncs to other devices.
+            var data = new DataObject();
+            data.SetText(text);
+            data.SetData("CanIncludeInClipboardHistory", DwordZero());
+            data.SetData("CanUploadToCloudClipboard", DwordZero());
+            Clipboard.SetDataObject(data, copy: true);
             Status.Text = confirmation;
         }
         catch (COMException)
@@ -244,6 +251,8 @@ public partial class OverlayWindow : Window
             Status.Text = "Clipboard busy";
         }
     }
+
+    private static MemoryStream DwordZero() => new(BitConverter.GetBytes(0));
 
     private Rect Pad(Rect box)
     {
