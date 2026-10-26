@@ -86,7 +86,7 @@ public partial class OverlayWindow : Window
         catch (Exception ex)
         {
             Status.Text = "OCR failed";
-            Status.ToolTip = ex.Message;
+            System.Diagnostics.Debug.WriteLine(ex);
             return;
         }
         RunSearch();

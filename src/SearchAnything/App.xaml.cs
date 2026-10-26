@@ -51,7 +51,7 @@ public partial class App : Application
         DispatcherUnhandledException += (_, args) =>
         {
             args.Handled = true;
-            _tray?.Notify("Something went wrong: " + args.Exception.Message);
+            _tray?.Notify("Something went wrong. Please try again.");
         };
 
         _settings = Settings.Load();
@@ -105,9 +105,9 @@ public partial class App : Application
         {
             shot = ScreenCapture.Grab(ScreenCapture.MonitorUnderCursor());
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _tray?.Notify("Couldn't capture the screen: " + ex.Message);
+            _tray?.Notify("Couldn't capture the screen. Please try again.");
             return;
         }
 
