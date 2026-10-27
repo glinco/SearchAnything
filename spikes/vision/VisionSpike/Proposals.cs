@@ -8,17 +8,14 @@ namespace VisionSpike;
 /// <summary>
 /// Candidate regions to score with an image-text model. Screens are mostly flat backgrounds, text and
 /// rectangular pictures, so: mark small blocks that have visible texture, ignore the ones OCR says are text,
-/// and take the connected areas that remain (photos, charts, maps, QR codes). Big areas, such as a wall of
-/// thumbnails that touch, are also cut into windows. A fixed coarse grid covers anything else, including
-/// mostly-text concepts like "table" or "source code".
+/// and take the connected areas that remain (photos, charts, maps, QR codes). A wall of thumbnails with thin
+/// gutters is cut into one region per thumbnail; other big areas are cut into windows. A fixed coarse grid
+/// covers anything else, including mostly-text concepts like "table" or "source code".
 /// </summary>
 internal static class Proposals
 {
     private const int Block = 4;
     private const int MinSide = 40;
-
-    /// <summary>How many pictures were cut into thumbnails so far (for the report).</summary>
-    public static int GridsSplit;
 
     public static List<Rectangle> Find(byte[] bgra, int width, int height, IEnumerable<Rectangle> textBoxes, int maxRegions, bool splitGrids)
     {
@@ -81,7 +78,6 @@ internal static class Proposals
                 if (cells.Count == 1)
                     continue;
                 grids.Add(p);
-                GridsSplit++;
                 foreach (var cell in cells)
                     Add(cell);
             }

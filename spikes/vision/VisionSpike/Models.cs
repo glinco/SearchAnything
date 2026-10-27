@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using Microsoft.ML.OnnxRuntime;
+using SearchAnything;
 
 namespace VisionSpike;
 
@@ -60,34 +60,26 @@ internal sealed class Siglip : IDisposable
     private int Size => _variant.Size;
     public int BatchSize { get; init; } = 16;
 
-    public Siglip(string models, SiglipVariant variant, bool gpu, string visionFile, bool fullText)
+    public Siglip(string models, SiglipVariant variant, bool gpu, string visionFile, string textFile)
     {
         _variant = variant;
         string dir = Path.Combine(models, variant.Folder);
         _vision = Sessions.Open(Path.Combine(dir, "onnx", visionFile), gpu);
-        _text = Sessions.Open(Path.Combine(dir, "onnx", fullText ? "text_model.onnx" : "text_model_quantized.onnx"), gpu);
+        _text = Sessions.Open(Path.Combine(dir, "onnx", textFile), gpu);
         _tokenizer = new GemmaTokenizer(Path.Combine(dir, "tokenizer.json"));
     }
 
     public string Describe() => "vision\n" + Sessions.Describe(_vision) + "\ntext\n" + Sessions.Describe(_text);
 
-    public long[] Tokenize(string text) => _tokenizer.Encode(text);
-
-    /// <summary>Time spent resizing crops (as opposed to running the model) in the last <see cref="EncodeRegions"/>.</summary>
-    public double LastPreprocessMs { get; private set; }
-
-    public float[][] EncodeRegions(SearchAnything.CapturedScreen screen, IReadOnlyList<Rectangle> regions)
+    public float[][] EncodeRegions(CapturedScreen screen, IReadOnlyList<Rectangle> regions)
     {
         var embeddings = new List<float[]>();
-        LastPreprocessMs = 0;
         for (int start = 0; start < regions.Count; start += BatchSize)
         {
             int n = Math.Min(BatchSize, regions.Count - start);
             var tensor = new float[n * 3 * Size * Size];
-            var sw = System.Diagnostics.Stopwatch.StartNew();
             System.Threading.Tasks.Parallel.For(0, n, i =>
-                ImageOps.WriteTensor(screen.Pixels, screen.Width, screen.Height, regions[start + i], Size, Mean, Std, tensor, i * 3 * Size * Size));
-            LastPreprocessMs += sw.Elapsed.TotalMilliseconds;
+                ImageOps.WriteTensor(screen, regions[start + i], Size, padSquare: false, Mean, Std, tensor, i * 3 * Size * Size));
             using var input = OrtValue.CreateTensorValueFromMemory(tensor, new long[] { n, 3, Size, Size });
             var (data, shape) = Sessions.Run(_vision, "pooler_output", ("pixel_values", input));
             embeddings.AddRange(Split(data, (int)shape[1]));
@@ -151,13 +143,11 @@ internal sealed class OwlVit : IDisposable
 
     public string Describe() => Sessions.Describe(_session);
 
-    public long[] Tokenize(string text) => _tokenizer.Encode(text, TokenLength).Ids;
-
     /// <summary>Detections per query, in screen pixels, for one square tile of the screen.</summary>
-    public List<Detection>[] Detect(Bitmap screen, Rectangle tile, IReadOnlyList<string> queries, float minScore)
+    public List<Detection>[] Detect(CapturedScreen screen, Rectangle tile, IReadOnlyList<string> queries, float minScore)
     {
         var pixels = new float[3 * Size * Size];
-        ImageOps.WriteTensor(screen, tile, Size, Mean, Std, padSquare: true, InterpolationMode.HighQualityBicubic, pixels, 0);
+        ImageOps.WriteTensor(screen, tile, Size, padSquare: true, Mean, Std, pixels, 0);
         var ids = new long[queries.Count * TokenLength];
         var mask = new long[queries.Count * TokenLength];
         for (int q = 0; q < queries.Count; q++)

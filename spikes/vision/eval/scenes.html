@@ -41,6 +41,8 @@ let seed = 1000 + sceneIndex;
 const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 const shuffled = list => list.map(x => [rand(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
 
+// Filler text is random words on purpose: the test is about pictures, and real sentences could
+// mention a query ("dog") and blur what the image model found with what OCR would find.
 const words = "the quarterly report shows steady growth across all regions while costs stayed flat and the team shipped two releases on time with fewer support tickets than last year".split(" ");
 const text = n => Array.from({ length: n }, () => words[Math.floor(rand() * words.length)]).join(" ");
 const para = (n, style = "") => `<p style="margin:0 0 10px;${style}">${text(n)}.</p>`;
