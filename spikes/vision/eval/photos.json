@@ -1,0 +1,990 @@
+[
+ {
+  "file": "dog_0.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/20110425_German_Shepherd_Dog_8505.jpg/960px-20110425_German_Shepherd_Dog_8505.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "c84d894446cc3d6f684b73b295743e541675d6de759bfc3236c0dbed2b3e2634",
+  "source": "https://commons.wikimedia.org/wiki/File:20110425_German_Shepherd_Dog_8505.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Jakub Ha\u0142un"
+ },
+ {
+  "file": "dog_1.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Cane_corso_g%C5%82owa_profil_493o.jpg/960px-Cane_corso_g%C5%82owa_profil_493o.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "acee3294ac36611dcabc7021486af0364aff35f487f648eb17f97f894c3283bb",
+  "source": "https://commons.wikimedia.org/wiki/File:Cane_corso_g%C5%82owa_profil_493o.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Pleple2000"
+ },
+ {
+  "file": "dog_2.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [
+   "beach"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Chinese_crested_dog_on_the_beach_%2813200%29.jpg/960px-Chinese_crested_dog_on_the_beach_%2813200%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "f5cef8586d368864151aea2c618ab3aabe8446fc5ff5fcce94899e30c91b4f81",
+  "source": "https://commons.wikimedia.org/wiki/File:Chinese_crested_dog_on_the_beach_(13200).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Rhododendrites"
+ },
+ {
+  "file": "dog_3.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/DSC09611a_Search_and_Rescue_Dog%2C_Austrian_Red_Cross_Perchtoldsdorf%2C_2024-10.jpg/960px-DSC09611a_Search_and_Rescue_Dog%2C_Austrian_Red_Cross_Perchtoldsdorf%2C_2024-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "c0ac0d25a9527a078489ea6eaf998e192ab2a01eb0a19a65f91805ed3066752c",
+  "source": "https://commons.wikimedia.org/wiki/File:DSC09611a_Search_and_Rescue_Dog,_Austrian_Red_Cross_Perchtoldsdorf,_2024-10.jpg",
+  "license": "CC BY 4.0",
+  "author": "Aciarium"
+ },
+ {
+  "file": "dog_6.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Liver_yellow_dog_in_the_water_looking_at_viewer_at_golden_hour_in_Don_Det_Laos.jpg/960px-Liver_yellow_dog_in_the_water_looking_at_viewer_at_golden_hour_in_Don_Det_Laos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "882c465a65109fd73f4f0a330b86d340d55cfa494ccfc48a0d981ab556af0cfa",
+  "source": "https://commons.wikimedia.org/wiki/File:Liver_yellow_dog_in_the_water_looking_at_viewer_at_golden_hour_in_Don_Det_Laos.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Basile Morin"
+ },
+ {
+  "file": "dog_7.jpg",
+  "labels": [
+   "dog"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/White_dog_sleeping_on_the_floor_with_puppies_after_nursing_in_Don_Det_Laos.jpg/960px-White_dog_sleeping_on_the_floor_with_puppies_after_nursing_in_Don_Det_Laos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "92b05ecc54237ea82ff3f3b2edfa1fb63441276051f4010ae80e92340e447c88",
+  "source": "https://commons.wikimedia.org/wiki/File:White_dog_sleeping_on_the_floor_with_puppies_after_nursing_in_Don_Det_Laos.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Basile Morin"
+ },
+ {
+  "file": "cat_0.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/20231125_housecat_south_meadows_PD100306.jpg/960px-20231125_housecat_south_meadows_PD100306.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "ceab6a295379cf63b430c5e081b1d4e192ed5c214e2d0f0a5989b328873da402",
+  "source": "https://commons.wikimedia.org/wiki/File:20231125_housecat_south_meadows_PD100306.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Paul Danese"
+ },
+ {
+  "file": "cat_3.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/Domestic_Cat_Face_Shot.jpg/960px-Domestic_Cat_Face_Shot.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "4c469c91b9aa874347304e88d9280fcd5ad412041d5d9fe0aa46be78323d7508",
+  "source": "https://commons.wikimedia.org/wiki/File:Domestic_Cat_Face_Shot.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Augustus Binu"
+ },
+ {
+  "file": "cat_4.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Domestic_cat_2011_G02.jpg/960px-Domestic_cat_2011_G02.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "e9f17a07d12b1336af053bae1eb5ef3bb3b68a9530b77f650033b1937ca6ffba",
+  "source": "https://commons.wikimedia.org/wiki/File:Domestic_cat_2011_G02.jpg",
+  "license": "Public domain",
+  "author": "George Chernilevsky"
+ },
+ {
+  "file": "cat_5.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Domestic_cat_felis_catus.jpg/960px-Domestic_cat_felis_catus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "c9a6a4c2ceda24d4fd0325fbb0c77cae7368c5db5a159343d7bc409ea7638e90",
+  "source": "https://commons.wikimedia.org/wiki/File:Domestic_cat_felis_catus.jpg",
+  "license": "GFDL",
+  "author": "M"
+ },
+ {
+  "file": "cat_6.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b6/Felis_catus-cat_on_snow.jpg/960px-Felis_catus-cat_on_snow.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a34ee05fe8cb1badd2d7ffbeec2257c79f3683bd3ea0aef2b4ec709e42878734",
+  "source": "https://commons.wikimedia.org/wiki/File:Felis_catus-cat_on_snow.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Von.grzanka"
+ },
+ {
+  "file": "cat_7.jpg",
+  "labels": [
+   "cat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/02/Tabby_cats_of_%C5%8Cizumi_Ryokuchi_Park%2C_January_2019_-_8816.jpg/960px-Tabby_cats_of_%C5%8Cizumi_Ryokuchi_Park%2C_January_2019_-_8816.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "300e6f7d59fd0b5a626938c35a0017230dce8a7145147fb60ebb3773ebefe9a7",
+  "source": "https://commons.wikimedia.org/wiki/File:Tabby_cats_of_%C5%8Cizumi_Ryokuchi_Park,_January_2019_-_8816.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Laitche"
+ },
+ {
+  "file": "horse_1.jpg",
+  "labels": [
+   "horse"
+  ],
+  "ignore": [
+   "mountain"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Domestic_horse_at_Suryachaur_and_the_mountains_in_the_back1.jpg/960px-Domestic_horse_at_Suryachaur_and_the_mountains_in_the_back1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "6a0c97c561931d775e6331d75bd0673dd62d8549312dd8ad39fd3f7db3b5c8a1",
+  "source": "https://commons.wikimedia.org/wiki/File:Domestic_horse_at_Suryachaur_and_the_mountains_in_the_back1.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Shadow Ayush"
+ },
+ {
+  "file": "horse_2.jpg",
+  "labels": [
+   "horse"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ad/Draft_horse_pulling_logs_in_Parc_naturel_Hautes_Fagnes%2C_Eupen%2C_Belgium_%28VeloTour_54_to_55%2C_DSCF3703%29.jpg/960px-Draft_horse_pulling_logs_in_Parc_naturel_Hautes_Fagnes%2C_Eupen%2C_Belgium_%28VeloTour_54_to_55%2C_DSCF3703%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "d3ab03bd5e2231465c410945c69e623f7acf39f1eabb1eb646ebd687f871daca",
+  "source": "https://commons.wikimedia.org/wiki/File:Draft_horse_pulling_logs_in_Parc_naturel_Hautes_Fagnes,_Eupen,_Belgium_(VeloTour_54_to_55,_DSCF3703).jpg",
+  "license": "CC BY 4.0",
+  "author": "Trougnouf"
+ },
+ {
+  "file": "horse_3.jpg",
+  "labels": [
+   "horse"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Haflinger_Fohlen_01.jpg/960px-Haflinger_Fohlen_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "9ea6e3ab9b61e9c8a9fcc3f0448e7c800202e9180e91b949de009d8b935e323a",
+  "source": "https://commons.wikimedia.org/wiki/File:Haflinger_Fohlen_01.jpg",
+  "license": "CC BY-SA 2.5",
+  "author": "B\u00f6hringer Friedrich"
+ },
+ {
+  "file": "horse_5.jpg",
+  "labels": [
+   "horse"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Horse_December_2014-1.jpg/960px-Horse_December_2014-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "986c7d1517e09f1f7dbe5c27bd0cc6e9d0dabd0ad7390a4dff914a17bb9f5e6e",
+  "source": "https://commons.wikimedia.org/wiki/File:Horse_December_2014-1.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Alvesgaspar"
+ },
+ {
+  "file": "horse_6.jpg",
+  "labels": [
+   "horse",
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/Horses_grazing_at_Trunkol_meadow%2C_Jammu_and_Kashmir%2C_India_%28crop%29.jpg/960px-Horses_grazing_at_Trunkol_meadow%2C_Jammu_and_Kashmir%2C_India_%28crop%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "3c923aeba77c828a2dee243aa3894ffc0212a99833c47bf77683a7d3cd5aa584",
+  "source": "https://commons.wikimedia.org/wiki/File:Horses_grazing_at_Trunkol_meadow,_Jammu_and_Kashmir,_India_(crop).jpg",
+  "license": "CC BY 4.0",
+  "author": "UnpetitproleX"
+ },
+ {
+  "file": "horse_7.jpg",
+  "labels": [
+   "horse",
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Parco_Naturale_Tre_Cime_horses_3.jpg/960px-Parco_Naturale_Tre_Cime_horses_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "03e03f3f76ba6d8320e6f93586ce739ee9e95f6d9f45fe6ef674b9a05300a4ab",
+  "source": "https://commons.wikimedia.org/wiki/File:Parco_Naturale_Tre_Cime_horses_3.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "kallerna"
+ },
+ {
+  "file": "bird_0.jpg",
+  "labels": [
+   "bird"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Asian_pied_starlings_%28Gracupica_contra%29.jpg/960px-Asian_pied_starlings_%28Gracupica_contra%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2609e98ceb93bca300ce7ec9a17917053829170379b41843e2de3899563020db",
+  "source": "https://commons.wikimedia.org/wiki/File:Asian_pied_starlings_(Gracupica_contra).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Scottish wildlife"
+ },
+ {
+  "file": "bird_1.jpg",
+  "labels": [
+   "bird"
+  ],
+  "ignore": [
+   "flower"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Bank_myna_%28Acridotheres_ginginianus%29.jpg/960px-Bank_myna_%28Acridotheres_ginginianus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "c43f3d22bce04c59fc497756d608ff119ebbed6dc5254b53d3fc4945becaeb6b",
+  "source": "https://commons.wikimedia.org/wiki/File:Bank_myna_(Acridotheres_ginginianus).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Scottish wildlife"
+ },
+ {
+  "file": "bird_3.jpg",
+  "labels": [
+   "bird"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Female_house_sparrow_at_Kodai.jpg/960px-Female_house_sparrow_at_Kodai.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "ea3427e6c8b00ed067205e60bca83e1f8d3a1a03919cfd4ee59842f722be9372",
+  "source": "https://commons.wikimedia.org/wiki/File:Female_house_sparrow_at_Kodai.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:It.deepak&action=edit&redlink=1\" class=\"new\" title=\"User"
+ },
+ {
+  "file": "bird_5.jpg",
+  "labels": [
+   "bird"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Grey-breasted_mountain_toucan_%28Andigena_hypoglauca%29_Caldas.jpg/960px-Grey-breasted_mountain_toucan_%28Andigena_hypoglauca%29_Caldas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "3b0c6eddcfaf3f63492f3e890beb396d9a88545f02d6f858e97937c78438d7f7",
+  "source": "https://commons.wikimedia.org/wiki/File:Grey-breasted_mountain_toucan_(Andigena_hypoglauca)_Caldas.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Scottish wildlife"
+ },
+ {
+  "file": "bird_7.jpg",
+  "labels": [
+   "bird"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Swallow-tailed_bee-eater_%28Merops_hirundineus_chrysolaimus%29.jpg/960px-Swallow-tailed_bee-eater_%28Merops_hirundineus_chrysolaimus%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "9531d1b0299cccd839b6ad1bbde372de54aedeb1ed85927a30309d03cfc17403",
+  "source": "https://commons.wikimedia.org/wiki/File:Swallow-tailed_bee-eater_(Merops_hirundineus_chrysolaimus).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Scottish wildlife"
+ },
+ {
+  "file": "elephant_0.jpg",
+  "labels": [
+   "elephant"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/African_elephant_%28Loxodonta_africana%29_2.jpg/960px-African_elephant_%28Loxodonta_africana%29_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "20bb029815fec247b2a0e5d0f4c10ced978e880151f1593798aa74e4481c28a9",
+  "source": "https://commons.wikimedia.org/wiki/File:African_elephant_(Loxodonta_africana)_2.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Scottish wildlife"
+ },
+ {
+  "file": "elephant_2.jpg",
+  "labels": [
+   "elephant"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Elefante_africano_de_sabana_%28Loxodonta_africana%29%2C_parque_nacional_Kruger%2C_Sud%C3%A1frica%2C_2018-07-25%2C_DD_06.jpg/960px-Elefante_africano_de_sabana_%28Loxodonta_africana%29%2C_parque_nacional_Kruger%2C_Sud%C3%A1frica%2C_2018-07-25%2C_DD_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "7b24065e99716964ac92017355c97144eaa5a4b5b258ddc698ee565af92047d3",
+  "source": "https://commons.wikimedia.org/wiki/File:Elefante_africano_de_sabana_(Loxodonta_africana),_parque_nacional_Kruger,_Sud%C3%A1frica,_2018-07-25,_DD_06.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"Spanish photograph"
+ },
+ {
+  "file": "elephant_5.jpg",
+  "labels": [
+   "elephant"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_04.jpg/960px-Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "4afa14afb4f5ef4a3c16ad6138c360d3855147f7ad6376a9f694a8ba1dd5aa80",
+  "source": "https://commons.wikimedia.org/wiki/File:Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_04.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Tisha Mukherjee"
+ },
+ {
+  "file": "elephant_6.jpg",
+  "labels": [
+   "elephant"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_06.jpg/960px-Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_06.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "0b4daf12683576e145d0e32c5a4ec3d142bb0f4443885dd45925752db698c597",
+  "source": "https://commons.wikimedia.org/wiki/File:Indian_elephant_in_Kaziranga_National_Park_March_2025_by_Tisha_Mukherjee_06.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Tisha Mukherjee"
+ },
+ {
+  "file": "car_1.jpg",
+  "labels": [
+   "car"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Audi_e-tron_%28Edit1%29.jpg/960px-Audi_e-tron_%28Edit1%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "b1761b4e23a355657fd3cd59f21e9a0696ec5c8c616164c1c8f7e52d3dec84a2",
+  "source": "https://commons.wikimedia.org/wiki/File:Audi_e-tron_(Edit1).jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Photograph taken by: Thomas Wolf (<a href=\"//commons.wikimedia.org/wiki/User:Der_Wolf_im_Wald\" title=\"User:Der"
+ },
+ {
+  "file": "car_2.jpg",
+  "labels": [
+   "car"
+  ],
+  "ignore": [
+   "beach"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/AvMalecon-LaHabanaCuba-04735.jpg/960px-AvMalecon-LaHabanaCuba-04735.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "ccf6caf3bc841ac7c37228893694584d0e875094c637a8fae92b3830ceb6c955",
+  "source": "https://commons.wikimedia.org/wiki/File:AvMalecon-LaHabanaCuba-04735.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Ezarate\n\n<table class=\"layouttemplat"
+ },
+ {
+  "file": "car_3.jpg",
+  "labels": [
+   "car"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Cape_Town_%28ZA%29%2C_Wale_Street_--_2024_--_3544.jpg/960px-Cape_Town_%28ZA%29%2C_Wale_Street_--_2024_--_3544.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a0ea99e39cecce0dab549d965db19120330f64d74860ad4ab18bb7e92629f855",
+  "source": "https://commons.wikimedia.org/wiki/File:Cape_Town_(ZA),_Wale_Street_--_2024_--_3544.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"German photographe"
+ },
+ {
+  "file": "car_4.jpg",
+  "labels": [
+   "car"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/DTM_Mercedes_W204_DiResta09_amk.jpg/960px-DTM_Mercedes_W204_DiResta09_amk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "007c98c08827acabec2a7029e398d6684cf0c7040b3608523b03c87079f82a67",
+  "source": "https://commons.wikimedia.org/wiki/File:DTM_Mercedes_W204_DiResta09_amk.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "AngMoKio"
+ },
+ {
+  "file": "car_7.jpg",
+  "labels": [
+   "car"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Public_transport_share_taxi_in_Maracaibo_city%2C_Zulia%2C_Venezuela.jpg/960px-Public_transport_share_taxi_in_Maracaibo_city%2C_Zulia%2C_Venezuela.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "b04ce0f39b0a2e6ddd84bdd4db76f1b648cb4fbb26e1c8289351c9d1d446c61d",
+  "source": "https://commons.wikimedia.org/wiki/File:Public_transport_share_taxi_in_Maracaibo_city,_Zulia,_Venezuela.jpg",
+  "license": "CC0",
+  "author": "Wilfredor"
+ },
+ {
+  "file": "bicycle_0.jpg",
+  "labels": [
+   "bicycle"
+  ],
+  "ignore": [
+   "mountain"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/14/20180924_UCI_Road_World_Championships_Innsbruck_Men_U23_ITT_Callum_Scotson_850_8281.jpg/960px-20180924_UCI_Road_World_Championships_Innsbruck_Men_U23_ITT_Callum_Scotson_850_8281.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "27f64eab31f9385b18e7776065248803de51ebb932dfce6f81ae996878525dad",
+  "source": "https://commons.wikimedia.org/wiki/File:20180924_UCI_Road_World_Championships_Innsbruck_Men_U23_ITT_Callum_Scotson_850_8281.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Granada"
+ },
+ {
+  "file": "bicycle_1.jpg",
+  "labels": [
+   "bicycle"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/20180924_UCI_Road_World_Championships_Innsbruck_Women_Juniors_ITT_Tetyana_Yaschenko_%28UKR%29_DSC_7564.jpg/960px-20180924_UCI_Road_World_Championships_Innsbruck_Women_Juniors_ITT_Tetyana_Yaschenko_%28UKR%29_DSC_7564.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "7be1b217a7b73b2eb40e496b037a9335e95d8a6ca4344110f5eab3f741201fc9",
+  "source": "https://commons.wikimedia.org/wiki/File:20180924_UCI_Road_World_Championships_Innsbruck_Women_Juniors_ITT_Tetyana_Yaschenko_(UKR)_DSC_7564.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Granada"
+ },
+ {
+  "file": "bicycle_2.jpg",
+  "labels": [
+   "bicycle"
+  ],
+  "ignore": [
+   "car"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e9/20180929_UCI_Road_World_Championships_Innsbruck_Women_Elite_Road_Race_Charlotte_Becker_850_7872.jpg/960px-20180929_UCI_Road_World_Championships_Innsbruck_Women_Elite_Road_Race_Charlotte_Becker_850_7872.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "e6b85d487e1e6e6a536313724d5db1640ddf12d539263a3322f4f192b1e09e97",
+  "source": "https://commons.wikimedia.org/wiki/File:20180929_UCI_Road_World_Championships_Innsbruck_Women_Elite_Road_Race_Charlotte_Becker_850_7872.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Granada"
+ },
+ {
+  "file": "bicycle_6.jpg",
+  "labels": [
+   "bicycle"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/28/Dirt_jump_IMG_7609.jpg/960px-Dirt_jump_IMG_7609.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "fd51a217f0dc3439a4a50d5959cda585fb125feb0c24cf91223a992be390e60a",
+  "source": "https://commons.wikimedia.org/wiki/File:Dirt_jump_IMG_7609.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Fischer.H"
+ },
+ {
+  "file": "bicycle_7.jpg",
+  "labels": [
+   "bicycle"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Parked_bicycle_with_graffitied_building_facade_and_doors_in_Amsterdam.jpg/960px-Parked_bicycle_with_graffitied_building_facade_and_doors_in_Amsterdam.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "1c995f2eb56eff9ff7d97c987ffdd0e997042cdc84b128448ea877d97fea74ce",
+  "source": "https://commons.wikimedia.org/wiki/File:Parked_bicycle_with_graffitied_building_facade_and_doors_in_Amsterdam.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Basile Morin"
+ },
+ {
+  "file": "airplane_1.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/Aeroflot_Airbus_A330_Kustov.jpg/960px-Aeroflot_Airbus_A330_Kustov.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "77ef2b26f8eb7f6ddc88a8057df6220df34cae2091aa3351a07e9ed60309da3d",
+  "source": "https://commons.wikimedia.org/wiki/File:Aeroflot_Airbus_A330_Kustov.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Sergey Kustov"
+ },
+ {
+  "file": "airplane_2.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3f/Airbus_A350-941_F-WWCF_MSN002_ILA_Berlin_2016_17.jpg/960px-Airbus_A350-941_F-WWCF_MSN002_ILA_Berlin_2016_17.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "202b5ac77c20c181700b5e97334763c3a4c8b631a54c49940be89c53dab422a3",
+  "source": "https://commons.wikimedia.org/wiki/File:Airbus_A350-941_F-WWCF_MSN002_ILA_Berlin_2016_17.jpg",
+  "license": "CC BY 4.0",
+  "author": "Julian Herzog (<a rel=\"nofollow"
+ },
+ {
+  "file": "airplane_3.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Bl%C3%A9riot_XI_Thulin_A_Mikael_Carlson_OTT_2013_10_silhouette.jpg/960px-Bl%C3%A9riot_XI_Thulin_A_Mikael_Carlson_OTT_2013_10_silhouette.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "7df890aa9c81361579ddd4efc72944af7c4df5c2fc0748e24c4838aeb4d04e3b",
+  "source": "https://commons.wikimedia.org/wiki/File:Bl%C3%A9riot_XI_Thulin_A_Mikael_Carlson_OTT_2013_10_silhouette.jpg",
+  "license": "CC BY 4.0",
+  "author": "Julian Herzog (<a rel=\"nofollow"
+ },
+ {
+  "file": "airplane_4.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/Emirates_Airbus_A380-861_A6-EER_MUC_2015_01.jpg/960px-Emirates_Airbus_A380-861_A6-EER_MUC_2015_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "9981777dac2b4c36cf37bbfb9e8d81032673aa710f504ab0532da7a8dc734f54",
+  "source": "https://commons.wikimedia.org/wiki/File:Emirates_Airbus_A380-861_A6-EER_MUC_2015_01.jpg",
+  "license": "CC BY 4.0",
+  "author": "Julian Herzog (<a rel=\"nofollow"
+ },
+ {
+  "file": "airplane_5.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Frecce_Tricolori_-_Aire_75_-_01.jpg/960px-Frecce_Tricolori_-_Aire_75_-_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "3d9bb83976e761278d8a965a3789e792d74ebbb4d66b03834177e72b4c9cb607",
+  "source": "https://commons.wikimedia.org/wiki/File:Frecce_Tricolori_-_Aire_75_-_01.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Carlos Delgado"
+ },
+ {
+  "file": "airplane_6.jpg",
+  "labels": [
+   "airplane"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/65/Patrouille_de_France_Radom_3_1.JPG/960px-Patrouille_de_France_Radom_3_1.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2901e39fac86fc7953f83f85f83556de5d66ce81ae687d1d92bcbae17d4d5168",
+  "source": "https://commons.wikimedia.org/wiki/File:Patrouille_de_France_Radom_3_1.JPG",
+  "license": "Attribution",
+  "author": "\u0141ukasz Golowanow"
+ },
+ {
+  "file": "sailboat_1.jpg",
+  "labels": [
+   "boat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/Harbour%2C_Wieck_a._Dar%C3%9F_%28P1100808%29.jpg/960px-Harbour%2C_Wieck_a._Dar%C3%9F_%28P1100808%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "3d2550567cd534a29ca5fa180197e6e5a09141677ff54c48302af9c0a1ad7b97",
+  "source": "https://commons.wikimedia.org/wiki/File:Harbour,_Wieck_a._Dar%C3%9F_(P1100808).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Matti Blume"
+ },
+ {
+  "file": "sailboat_2.jpg",
+  "labels": [
+   "boat"
+  ],
+  "ignore": [
+   "mountain"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Moonbeam_-_Brest_2008-10.jpg/960px-Moonbeam_-_Brest_2008-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "cce3891b1ff2b6a8b56aea0cdc737d734a731f3d7ebaa43fd90e366f45bda840",
+  "source": "https://commons.wikimedia.org/wiki/File:Moonbeam_-_Brest_2008-10.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Ludovic P\u00e9ron"
+ },
+ {
+  "file": "sailboat_3.jpg",
+  "labels": [
+   "boat"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e0/Royal-clipper.jpg/960px-Royal-clipper.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a7aeb5b596af0a9082c1da0cb4e2e555edd5e7ecef9d0066ac5977d932b35730",
+  "source": "https://commons.wikimedia.org/wiki/File:Royal-clipper.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Cbuske46"
+ },
+ {
+  "file": "sailboat_5.jpg",
+  "labels": [
+   "boat"
+  ],
+  "ignore": [
+   "beach"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Sunset_Key_and_Sailboats%2C_Florida%2C_2025.jpg/960px-Sunset_Key_and_Sailboats%2C_Florida%2C_2025.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "751bfbcace8d300dc30066c424fe7e796038fa3fd5cca6f016b1f1d9857513f8",
+  "source": "https://commons.wikimedia.org/wiki/File:Sunset_Key_and_Sailboats,_Florida,_2025.jpg",
+  "license": "CC0",
+  "author": "Julian Lupyan"
+ },
+ {
+  "file": "sailboat_7.jpg",
+  "labels": [
+   "boat"
+  ],
+  "ignore": [
+   "beach"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Zoutelande_%28NL%29%2C_Strand%2C_Blick_auf_die_Nordsee_--_2022_--_4984.jpg/960px-Zoutelande_%28NL%29%2C_Strand%2C_Blick_auf_die_Nordsee_--_2022_--_4984.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "e60c7091322a0e94f6ae0de94d295dc445b0ef9ff98b280133c1b06f2d82aeb1",
+  "source": "https://commons.wikimedia.org/wiki/File:Zoutelande_(NL),_Strand,_Blick_auf_die_Nordsee_--_2022_--_4984.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<span title=\"German photographe"
+ },
+ {
+  "file": "pizza_3.jpg",
+  "labels": [
+   "pizza"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/L%26B_Spumoni_Gardens_pizza_%2841436%29.jpg/960px-L%26B_Spumoni_Gardens_pizza_%2841436%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a9047c8ca5067bb5047606b8ee7561230bc0d04c6cad1cadaca7c08030689470",
+  "source": "https://commons.wikimedia.org/wiki/File:L%26B_Spumoni_Gardens_pizza_(41436).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Rhododendrites"
+ },
+ {
+  "file": "pizza_4.jpg",
+  "labels": [
+   "pizza"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Multi-fruits_summer_pie%2C_homemade_by_Mrs_Jebulon.png/960px-Multi-fruits_summer_pie%2C_homemade_by_Mrs_Jebulon.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a9dd21eaea4254c1c6d9836e50d15ebf13138cee81138b757b632f6d7191a64b",
+  "source": "https://commons.wikimedia.org/wiki/File:Multi-fruits_summer_pie,_homemade_by_Mrs_Jebulon.png",
+  "license": "CC0",
+  "author": "Jebulon"
+ },
+ {
+  "file": "pizza_5.jpg",
+  "labels": [
+   "pizza"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Pizza_Tradici%C3%B3n_Napolitana.jpg/960px-Pizza_Tradici%C3%B3n_Napolitana.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "3bb48aff7b155df829126a14c6ce6448d97b74ecc588cb129b9a4b948f67fef6",
+  "source": "https://commons.wikimedia.org/wiki/File:Pizza_Tradici%C3%B3n_Napolitana.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Rjcastillo"
+ },
+ {
+  "file": "pizza_6.jpg",
+  "labels": [
+   "pizza"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Pizza_food.jpg/960px-Pizza_food.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "cba029e5d1e15e21cf8cc3c2c852b4e8a1bfc86bc53bb1ec844d23bcc8156fbe",
+  "source": "https://commons.wikimedia.org/wiki/File:Pizza_food.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "<a href=\"//commons.wikimedia.org/w/index.php?title=User:Arungupta408&action=edit&redlink=1\" class=\"new\" title=\"U"
+ },
+ {
+  "file": "cup_of_coffee_0.jpg",
+  "labels": [
+   "coffee cup"
+  ],
+  "ignore": [
+   "cake"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/A_cup_of_coffee_in_Mohk.jpg/960px-A_cup_of_coffee_in_Mohk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "14b72cdb96557c4667162fd58a2d11a224e23487bea9a5ccf1e00d0c4d0032f1",
+  "source": "https://commons.wikimedia.org/wiki/File:A_cup_of_coffee_in_Mohk.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Peachyeung316"
+ },
+ {
+  "file": "cup_of_coffee_4.jpg",
+  "labels": [
+   "coffee cup"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Cup_of_coffee_%28Serbian_cuisine%2C_Grand_kava%29.jpg/960px-Cup_of_coffee_%28Serbian_cuisine%2C_Grand_kava%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2e7a802ffe3880169b8e26e77f1e74ae3f9d90d257f84c60dd9ffafe521475a1",
+  "source": "https://commons.wikimedia.org/wiki/File:Cup_of_coffee_(Serbian_cuisine,_Grand_kava).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Petar Milo\u0161evi\u0107"
+ },
+ {
+  "file": "cup_of_coffee_5.jpg",
+  "labels": [
+   "coffee cup"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Gray_espresso_cup_with_amaretto.jpg/960px-Gray_espresso_cup_with_amaretto.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "126eb81150977c1f3f4b46acdd1e4e2148fa3aa2f6a1e0c6e35c925cb810716c",
+  "source": "https://commons.wikimedia.org/wiki/File:Gray_espresso_cup_with_amaretto.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Friedrich Haag"
+ },
+ {
+  "file": "flower_0.jpg",
+  "labels": [
+   "flower"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Halictus_bee_on_flower-2.jpg/960px-Halictus_bee_on_flower-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "ddf9576fc4a150c7811f6b999340b8e1e1e376ded8dfa0dfa0d0092de8181487",
+  "source": "https://commons.wikimedia.org/wiki/File:Halictus_bee_on_flower-2.jpg",
+  "license": "CC BY 2.5",
+  "author": "Alvesgaspar"
+ },
+ {
+  "file": "flower_1.jpg",
+  "labels": [
+   "flower"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Helenium_%27El_Dorado%27._Bloeiwijze._18-07-2021._%28d.j.b%29.jpg/960px-Helenium_%27El_Dorado%27._Bloeiwijze._18-07-2021._%28d.j.b%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "8df7d2f1ea1aa5fdd6bc50250c7fd399470ca0f440fc78efbaa4089c13b066ea",
+  "source": "https://commons.wikimedia.org/wiki/File:Helenium_%27El_Dorado%27._Bloeiwijze._18-07-2021._(d.j.b).jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Dominicus Johannes Bergsma"
+ },
+ {
+  "file": "flower_3.jpg",
+  "labels": [
+   "flower"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/LantanaFlowerLeaves.jpg/960px-LantanaFlowerLeaves.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "8cd666978b028c4252559c62c0bbfa705da539dfda18ae10d4ce8c3e3bd50e86",
+  "source": "https://commons.wikimedia.org/wiki/File:LantanaFlowerLeaves.jpg",
+  "license": "CC BY-SA 3.0",
+  "author": "Alvesgaspar"
+ },
+ {
+  "file": "flower_5.jpg",
+  "labels": [
+   "flower"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/34/Scabiosa_atropurpurea%2C_flower%2C_S%C3%A8te_01.jpg/960px-Scabiosa_atropurpurea%2C_flower%2C_S%C3%A8te_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "5d0288232e882e8ce933b60cbe2dfbcb0470088fc4e8a79ef865f7f8350c98f5",
+  "source": "https://commons.wikimedia.org/wiki/File:Scabiosa_atropurpurea,_flower,_S%C3%A8te_01.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Christ"
+ },
+ {
+  "file": "flower_6.jpg",
+  "labels": [
+   "flower"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Scilla_siberica_flower_-_Keila.jpg/960px-Scilla_siberica_flower_-_Keila.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "247fdc285927b3840265c20b3fff3bbc2e286cc328ec50183effec0b443f85ac",
+  "source": "https://commons.wikimedia.org/wiki/File:Scilla_siberica_flower_-_Keila.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Ivar Leidus"
+ },
+ {
+  "file": "mountain_0.jpg",
+  "labels": [
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Dombay%2C_Dzhuguturlyuchat_massif_and_glacier%2C_Caucasus_Mountains%2C_Karachay-Cherkessia.jpg/960px-Dombay%2C_Dzhuguturlyuchat_massif_and_glacier%2C_Caucasus_Mountains%2C_Karachay-Cherkessia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "fc348b5deb332769813675227dbce396cd80df0ff3dfc8c1c8abf4d8b8925406",
+  "source": "https://commons.wikimedia.org/wiki/File:Dombay,_Dzhuguturlyuchat_massif_and_glacier,_Caucasus_Mountains,_Karachay-Cherkessia.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "mountain_1.jpg",
+  "labels": [
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Everest%2C_Himalayas.jpg/960px-Everest%2C_Himalayas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "a190b2a813e529d608e5a179b293c626b86ef012279b75f283f11a018119d30f",
+  "source": "https://commons.wikimedia.org/wiki/File:Everest,_Himalayas.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "mountain_2.jpg",
+  "labels": [
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/29/Himalayas%2C_Ama_Dablam%2C_Nepal.jpg/960px-Himalayas%2C_Ama_Dablam%2C_Nepal.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "39d077117526fb96e72e21dbacbcb4cb71d112142d70d4f828b0811a97f3eeb8",
+  "source": "https://commons.wikimedia.org/wiki/File:Himalayas,_Ama_Dablam,_Nepal.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "mountain_3.jpg",
+  "labels": [
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/23/Mountain_lake%2C_Mylgval_mountain_cirque%2C_Western_Caucasus.jpg/960px-Mountain_lake%2C_Mylgval_mountain_cirque%2C_Western_Caucasus.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "ea93f8c7b5b0046a0eccab9df56667c9944cd3c3e92664f424f4fc903dbfe9cf",
+  "source": "https://commons.wikimedia.org/wiki/File:Mountain_lake,_Mylgval_mountain_cirque,_Western_Caucasus.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "mountain_4.jpg",
+  "labels": [
+   "mountain"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Mountains_in_snow%2C_Mountain_lake%2C_Chola_Valley%2C_Nepal%2C_Himalayas.jpg/960px-Mountains_in_snow%2C_Mountain_lake%2C_Chola_Valley%2C_Nepal%2C_Himalayas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "261cb029bf50728d5bbddf94e84744610e9035365cc30f287befda21d5d9bee3",
+  "source": "https://commons.wikimedia.org/wiki/File:Mountains_in_snow,_Mountain_lake,_Chola_Valley,_Nepal,_Himalayas.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "beach_0.jpg",
+  "labels": [
+   "beach"
+  ],
+  "ignore": [
+   "mountain"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/45/Beach_of_Cape_Fiolent%2C_Crimea.jpg/960px-Beach_of_Cape_Fiolent%2C_Crimea.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "0eb2533fc7ff38b2076e8e93f600723c075ce89811039790fbb4023a42a54644",
+  "source": "https://commons.wikimedia.org/wiki/File:Beach_of_Cape_Fiolent,_Crimea.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "beach_1.jpg",
+  "labels": [
+   "beach"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/Havelock_Island%2C_Mangrove_tree_on_the_beach%2C_Andaman_Islands.jpg/960px-Havelock_Island%2C_Mangrove_tree_on_the_beach%2C_Andaman_Islands.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "f995a7e916e0e966cc1b753dbbecd0539fddc8bf9556703f3ddd7c853f5fedd6",
+  "source": "https://commons.wikimedia.org/wiki/File:Havelock_Island,_Mangrove_tree_on_the_beach,_Andaman_Islands.jpg",
+  "license": "CC BY 4.0",
+  "author": "Vyacheslav Argenberg"
+ },
+ {
+  "file": "beach_2.jpg",
+  "labels": [
+   "beach"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b9/Mystic_Beach%2C_Vancouver_Island%2C_Canada_10.jpg/960px-Mystic_Beach%2C_Vancouver_Island%2C_Canada_10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "770b05c2b832c225611fff6b89feac2c344b91333eb286aa4d1416bd5cc4cd4c",
+  "source": "https://commons.wikimedia.org/wiki/File:Mystic_Beach,_Vancouver_Island,_Canada_10.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Michal Klajban"
+ },
+ {
+  "file": "beach_3.jpg",
+  "labels": [
+   "beach"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Parasols%2C_Evening%2C_Beach%2C_Rincon_de_la_Victoria%2C_Andalusia%2C_Spain.jpg/960px-Parasols%2C_Evening%2C_Beach%2C_Rincon_de_la_Victoria%2C_Andalusia%2C_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "c34f632966b79e70e35514663a468ddf6d16270708a5fdc6f3de71656691deb3",
+  "source": "https://commons.wikimedia.org/wiki/File:Parasols,_Evening,_Beach,_Rincon_de_la_Victoria,_Andalusia,_Spain.jpg",
+  "license": "CC0",
+  "author": "Jebulon"
+ },
+ {
+  "file": "beach_5.jpg",
+  "labels": [
+   "beach"
+  ],
+  "ignore": [
+   "mountain"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Seal_Rocks%2C_Ocean_Beach%2C_San_Francisco.jpg/960px-Seal_Rocks%2C_Ocean_Beach%2C_San_Francisco.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "4bb17cd8daeebe7fb5850f2c3587a36d6c3cbb310290c4eee90bbc1d259bac40",
+  "source": "https://commons.wikimedia.org/wiki/File:Seal_Rocks,_Ocean_Beach,_San_Francisco.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Radomianin"
+ },
+ {
+  "file": "laptop_1.jpg",
+  "labels": [
+   "laptop"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Acer_Swift_3_rear-right_edge.jpg/960px-Acer_Swift_3_rear-right_edge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "fd6284142f7b71d6e18f40ee2fb84b0d56d72c9ba3f6c7e47b7a6ebdc280e019",
+  "source": "https://commons.wikimedia.org/wiki/File:Acer_Swift_3_rear-right_edge.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "Bobulous"
+ },
+ {
+  "file": "laptop_4.jpg",
+  "labels": [
+   "laptop"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Laptop_der_Marke_exone_go_20240203_HOF06886_RAW-Export_000276.png/960px-Laptop_der_Marke_exone_go_20240203_HOF06886_RAW-Export_000276.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "76e184d13342c3373f96addf3303b89d26f7ab9e5eb117ad390df15f31d22af1",
+  "source": "https://commons.wikimedia.org/wiki/File:Laptop_der_Marke_exone_go_20240203_HOF06886_RAW-Export_000276.png",
+  "license": "CC BY 4.0",
+  "author": "PantheraLeo1359531"
+ },
+ {
+  "file": "laptop_5.jpg",
+  "labels": [
+   "laptop"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Powerbook_100_pose.jpg/960px-Powerbook_100_pose.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "dd2d53cb42acec81ebd8021383a9fe161f0050b099f896c182330cd51076b096",
+  "source": "https://commons.wikimedia.org/wiki/File:Powerbook_100_pose.jpg",
+  "license": "CC0",
+  "author": "Danamania"
+ },
+ {
+  "file": "laptop_7.jpg",
+  "labels": [
+   "laptop"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Toshiba_T1000SE-IMG_4865.JPG/960px-Toshiba_T1000SE-IMG_4865.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2c97c2b1cf344c7bbce0165a350724cd552da159a1352501a1b3f07d1f91be4a",
+  "source": "https://commons.wikimedia.org/wiki/File:Toshiba_T1000SE-IMG_4865.JPG",
+  "license": "CC BY-SA 2.0 fr",
+  "author": "Rama"
+ },
+ {
+  "file": "cake_0.jpg",
+  "labels": [
+   "cake"
+  ],
+  "ignore": [
+   "flower"
+  ],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Desserts_and_Wine.jpg/960px-Desserts_and_Wine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2e6885811dcfe99da62d6ee232e123e030781d46a9e6e406ce7f0c12f424d0ac",
+  "source": "https://commons.wikimedia.org/wiki/File:Desserts_and_Wine.jpg",
+  "license": "CC BY-SA 4.0",
+  "author": "FranHogan"
+ },
+ {
+  "file": "streetmap_0.jpg",
+  "labels": [
+   "map"
+  ],
+  "ignore": [],
+  "url": "https://upload.wikimedia.org/wikipedia/commons/8/87/Luxembourg_city_openstreetmap_01.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+  "sha256": "83e519471fad84bfdef2ee4229cb51285bba96dd16a278ca7b3806d6db1920cc",
+  "source": "https://commons.wikimedia.org/wiki/File:Luxembourg_city_openstreetmap_01.png",
+  "license": "CC BY-SA 3.0",
+  "author": "Christian Ries"
+ },
+ {
+  "file": "streetmap_2.jpg",
+  "labels": [
+   "map"
+  ],
+  "ignore": [],
+  "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Vatican_City_map_DE.png/960px-Vatican_City_map_DE.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+  "sha256": "2396c09979a830d325ff6bce313a7adf60c8e564d2162f6dfd955dcba8395fbe",
+  "source": "https://commons.wikimedia.org/wiki/File:Vatican_City_map_DE.png",
+  "license": "CC BY-SA 3.0",
+  "author": "Thoroe"
+ },
+ {
+  "file": "qr_0.jpg",
+  "labels": [
+   "qr code"
+  ],
+  "ignore": [],
+  "url": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Bhubaneswar_Odia_Wikipedia_workshop_QR_Code_18_November_2012.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+  "sha256": "399f79bfbe6076db6ed0b4a6bfb50e92c894d1badc8b8b0491eec659f1cc2697",
+  "source": "https://commons.wikimedia.org/wiki/File:Bhubaneswar_Odia_Wikipedia_workshop_QR_Code_18_November_2012.png",
+  "license": "CC BY-SA 3.0",
+  "author": "Subhashish Panigrahi"
+ },
+ {
+  "file": "qr_4.jpg",
+  "labels": [
+   "qr code"
+  ],
+  "ignore": [],
+  "url": "https://upload.wikimedia.org/wikipedia/commons/1/18/QRc%C3%B3digo_portada_wikipedia_espa%C3%B1ol.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+  "sha256": "3fc6e6203af3e98863e70a13d381dadf786a346ee1d020af682369473d7fdd50",
+  "source": "https://commons.wikimedia.org/wiki/File:QRc%C3%B3digo_portada_wikipedia_espa%C3%B1ol.png",
+  "license": "Public domain",
+  "author": "Esceptic0"
+ },
+ {
+  "file": "qr_5.jpg",
+  "labels": [
+   "qr code"
+  ],
+  "ignore": [],
+  "url": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Wikipedia_extreme_qr_code_mobile_de.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+  "sha256": "8b7a0a849da38f47510536ae4b0453337b2932f1af9a9faf15a9838250c43b04",
+  "source": "https://commons.wikimedia.org/wiki/File:Wikipedia_extreme_qr_code_mobile_de.png",
+  "license": "CC BY-SA 3.0",
+  "author": "qrc-designer"
+ }
+]
