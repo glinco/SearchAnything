@@ -75,7 +75,7 @@ internal static class Program
         string text = opt.TextInt8 ? "text_model_quantized.onnx" : "text_model.onnx";
         var model = new Siglip(ModelsDir, variant, opt.Gpu, vision, text) { BatchSize = opt.Batch };
         return new SiglipSearch(model, opt.Threshold ?? (variant == SiglipVariant.B32 ? 0.002f : 0.005f),
-                                opt.Prompt ?? "{q}", opt.MaxRegions, splitGrids: !opt.NoSplit);
+                                opt.Prompt ?? "{q}", opt.MaxRegions, splitGrids: !opt.NoSplit, snap: !opt.NoSnap);
     }
 
     /// <summary>Runs every query on every test screen, then reports speed and accuracy against the ground truth.</summary>
@@ -337,6 +337,7 @@ internal sealed class Options
         Regions (SigLIP)
           --max-regions <n>        Most regions encoded per screenshot. Default 128
           --no-split               Don't cut thumbnail walls into one region per thumbnail
+          --no-snap                Don't widen highlights to the whole picture they sit on
           --batch <n>              Regions per model call. Default 16
 
         Tiles (OWL-ViT)
@@ -351,7 +352,7 @@ internal sealed class Options
 
     public string Command = "eval", Model = "siglip", Variant = "b16", Tiles = "768";
     public string? RunName, Prompt, Image;
-    public bool Gpu, Int8, TextInt8, NoSplit, Draw, DrawRegions;
+    public bool Gpu, Int8, TextInt8, NoSplit, NoSnap, Draw, DrawRegions;
     public int Batch = 16, MaxRegions = 128;
     public float? Threshold;
     public HashSet<int>? Scenes;
@@ -373,6 +374,7 @@ internal sealed class Options
                 case "--threshold": o.Threshold = float.Parse(args[++i], CultureInfo.InvariantCulture); break;
                 case "--max-regions": o.MaxRegions = int.Parse(args[++i], CultureInfo.InvariantCulture); break;
                 case "--no-split": o.NoSplit = true; break;
+                case "--no-snap": o.NoSnap = true; break;
                 case "--batch": o.Batch = int.Parse(args[++i], CultureInfo.InvariantCulture); break;
                 case "--tiles": o.Tiles = args[++i]; break;
                 case "--name": o.RunName = args[++i]; break;
