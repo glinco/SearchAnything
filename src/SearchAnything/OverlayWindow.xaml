@@ -23,7 +23,7 @@
                 <DropShadowEffect BlurRadius="24" ShadowDepth="4" Opacity="0.5"/>
             </Border.Effect>
             <StackPanel>
-                <StackPanel Orientation="Horizontal">
+                <StackPanel x:Name="Bar" Orientation="Horizontal">
                     <TextBlock Text="&#xE721;" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets" FontSize="16"
                                Foreground="#FFBE00" VerticalAlignment="Center" Margin="0,0,10,0"/>
                     <Grid Width="380">
@@ -35,9 +35,34 @@
                     </Grid>
                     <TextBlock x:Name="Status" FontSize="14" Foreground="#AAFFFFFF" VerticalAlignment="Center"
                                TextAlignment="Right" MinWidth="110" Margin="12,0,0,0"/>
+                    <!-- Shown when nothing on screen matches: the same query, searched across installed programs. -->
+                    <Button x:Name="ProgramsButton" Visibility="Collapsed" Focusable="False" Cursor="Hand"
+                            Margin="10,0,0,0" VerticalAlignment="Center" Click="OnProgramsButton"
+                            ToolTip="Search programs on this PC's drives">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="Chip" Background="#26FFBE00" BorderBrush="#66FFBE00" BorderThickness="1"
+                                        CornerRadius="6" Padding="8,3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Search programs" FontSize="13" Foreground="#FFBE00" VerticalAlignment="Center"/>
+                                        <Border Background="#33FFFFFF" CornerRadius="3" Padding="4,0" Margin="8,0,0,0">
+                                            <TextBlock Text="Enter" FontSize="10" Foreground="#CCFFFFFF" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="Chip" Property="Background" Value="#4DFFBE00"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
-                <TextBlock x:Name="Hint" FontSize="11" Foreground="#88FFFFFF" Margin="26,6,0,0"
-                           Text="Enter next · Shift+Enter previous · Ctrl+C copy line · Ctrl+Shift+C copy all · Esc or click to close"/>
+                <!-- Program results, filled in code. As wide as the bar so long paths are trimmed, not widening it. -->
+                <StackPanel x:Name="ProgramList" Visibility="Collapsed" Margin="0,8,0,0" HorizontalAlignment="Left"
+                            Width="{Binding ActualWidth, ElementName=Bar}"/>
+                <TextBlock x:Name="Hint" FontSize="11" Foreground="#88FFFFFF" Margin="26,6,0,0"/>
             </StackPanel>
         </Border>
     </Grid>

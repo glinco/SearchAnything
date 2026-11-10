@@ -12,18 +12,27 @@ internal sealed class TrayIcon : IDisposable
     private readonly ContextMenuStrip _menu;
     private readonly ToolStripMenuItem _searchItem;
     private readonly ToolStripMenuItem _startWithWindowsItem;
+    private readonly ToolStripMenuItem _keepProgramsItem;
 
-    public TrayIcon(Action onSearch, Action onChangeHotkey, Action<bool> onStartWithWindowsChanged, Action onExit)
+    public TrayIcon(Action onSearch, Action onChangeHotkey, Action<bool> onStartWithWindowsChanged,
+        Action<bool> onKeepProgramsChanged, Action onExit)
     {
         _searchItem = new ToolStripMenuItem("Search screen", null, (_, _) => onSearch());
         _startWithWindowsItem = new ToolStripMenuItem("Start with Windows") { CheckOnClick = true };
         _startWithWindowsItem.Click += (_, _) => onStartWithWindowsChanged(_startWithWindowsItem.Checked);
+        _keepProgramsItem = new ToolStripMenuItem("Keep program list ready")
+        {
+            CheckOnClick = true,
+            ToolTipText = "Faster program search, using a little memory. Off: programs are scanned each time you search them.",
+        };
+        _keepProgramsItem.Click += (_, _) => onKeepProgramsChanged(_keepProgramsItem.Checked);
 
         _menu = new ContextMenuStrip();
         _menu.Items.Add(_searchItem);
         _menu.Items.Add(new ToolStripSeparator());
         _menu.Items.Add("Change shortcut…", null, (_, _) => onChangeHotkey());
         _menu.Items.Add(_startWithWindowsItem);
+        _menu.Items.Add(_keepProgramsItem);
         _menu.Items.Add(new ToolStripSeparator());
         _menu.Items.Add("Exit", null, (_, _) => onExit());
 
@@ -48,6 +57,8 @@ internal sealed class TrayIcon : IDisposable
     }
 
     public void SetStartWithWindows(bool enabled) => _startWithWindowsItem.Checked = enabled;
+
+    public void SetKeepPrograms(bool enabled) => _keepProgramsItem.Checked = enabled;
 
     public void Notify(string message) =>
         _icon.ShowBalloonTip(4000, "SearchAnything", message, ToolTipIcon.Info);

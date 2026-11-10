@@ -13,6 +13,9 @@ internal sealed class Settings
 
     public string Hotkey { get; set; } = SearchAnything.Hotkey.Default.ToString();
 
+    /// <summary>Keep the list of installed programs in memory, so program search answers instantly.</summary>
+    public bool KeepProgramListReady { get; set; } = true;
+
     public static Settings Load()
     {
         try
