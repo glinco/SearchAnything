@@ -206,7 +206,7 @@ public class ProgramSearchTests
             var drive = programs.Drives().Single(d => d.Drive == system);
             Assert.False(drive.Scan);
             Assert.True(drive.System);
-            Assert.Equal(false, programs.DriveChoices()[system]);
+            Assert.False(programs.DriveChoices()[system]);
         }
     }
 

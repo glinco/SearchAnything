@@ -30,10 +30,8 @@ internal sealed class TrayIcon : IDisposable
         };
         _keepProgramsItem.Click += (_, _) => onKeepProgramsChanged(_keepProgramsItem.Checked);
 
-        _drivesItem = new ToolStripMenuItem("Drives to scan for programs")
-        {
-            ToolTipText = "Turn a drive off to skip it. USB sticks and memory cards are off until you turn them on.",
-        };
+        // No tooltip here: it would open on top of the drive list.
+        _drivesItem = new ToolStripMenuItem("Drives to scan for programs");
         // Filled each time it opens, so drives plugged in since are listed.
         _drivesItem.DropDownItems.Add(new ToolStripMenuItem("…") { Enabled = false });
         _drivesItem.DropDownOpening += (_, _) => FillDrives(listDrives(), onDriveChanged);
@@ -89,6 +87,8 @@ internal sealed class TrayIcon : IDisposable
             item.Click += (_, _) => onDriveChanged(drive.Drive, item.Checked);
             _drivesItem.DropDownItems.Add(item);
         }
+        _drivesItem.DropDownItems.Add(new ToolStripSeparator());
+        _drivesItem.DropDownItems.Add(new ToolStripMenuItem("USB sticks and memory cards start off") { Enabled = false });
     }
 
     /// <summary>"D:  Games", "C:  (Windows)", "F:  KINGSTON  (removable)".</summary>

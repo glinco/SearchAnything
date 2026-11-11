@@ -57,6 +57,9 @@ public partial class OverlayWindow : Window
     private string? _driveFilter;
     /// <summary>The drive chips shown, in order: null ("All") first.</summary>
     private List<string?> _chipDrives = new();
+    /// <summary>Until then, scan progress leaves the status alone so "Added to Start menu" can be read.</summary>
+    private DateTime _noteUntil;
+    private static readonly TimeSpan NoteFor = TimeSpan.FromSeconds(2.5);
     /// <summary>Icons for rows shown during this search only; dropped when it closes.</summary>
     private readonly Dictionary<string, ImageSource?> _icons = new();
 
@@ -352,6 +355,10 @@ public partial class OverlayWindow : Window
         for (int i = 0; i < _programHits.Count; i++)
             ProgramList.Children.Add(ProgramRow(_programHits[i], i));
 
+        // An update from the scan keeps a fresh confirmation; typing replaces it.
+        if (keepPick && DateTime.UtcNow < _noteUntil)
+            return;
+        _noteUntil = default;
         Status.Foreground = StatusNormal;
         if (results.ScanningDrive != null)
             Status.Text = results.Known == 0 ? $"Scanning {results.ScanningDrive}…" : $"{results.Total} · scanning {results.ScanningDrive}…";
@@ -551,6 +558,7 @@ public partial class OverlayWindow : Window
         {
             Status.Foreground = StatusNormal;
             Status.Text = StartMenu.Add(program) ? "Added to Start menu" : "Already in Start menu";
+            _noteUntil = DateTime.UtcNow + NoteFor;
         }
         catch (Exception ex) when (ex is COMException or IOException or UnauthorizedAccessException)
         {
@@ -562,6 +570,7 @@ public partial class OverlayWindow : Window
     {
         Status.Text = message;
         Status.Foreground = StatusNone;
+        _noteUntil = DateTime.UtcNow + NoteFor;
     }
 
     private ImageSource? IconFor(string path)
@@ -603,6 +612,7 @@ public partial class OverlayWindow : Window
         {
             Status.Text = "Clipboard busy";
         }
+        _noteUntil = DateTime.UtcNow + NoteFor;
     }
 
     private static MemoryStream DwordZero() => new(BitConverter.GetBytes(0));
