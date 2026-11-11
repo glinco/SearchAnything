@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Visual search test scene</title>
+<!--
+  Builds one 1920x1080 test "screen" (?scene=N) out of the photos in photos.json and
+  generated charts, tables and UI. After layout it writes the ground truth, every
+  labelled element's box in screen pixels, into <script id="gt">, which render.ps1
+  reads back with --dump-dom. Needs --allow-file-access-from-files to read photos.json.
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; font: 15px/1.45 "Segoe UI", sans-serif; color: #1d1d1f; background: #fff; }
+  img { object-fit: cover; display: block; }
+  .bar { height: 48px; display: flex; align-items: center; gap: 16px; padding: 0 20px; border-bottom: 1px solid #ddd; background: #f7f7f7; font-weight: 600; }
+  .muted { color: #6b6b70; }
+  .grid { display: grid; gap: 12px; }
+  .card { border: 1px solid #e3e3e0; border-radius: 10px; padding: 14px; background: #fff; }
+  .row { display: flex; gap: 16px; }
+  table { border-collapse: collapse; font-size: 14px; }
+  td, th { border: 1px solid #d0d0d0; padding: 4px 10px; text-align: left; }
+  th { background: #f0f0f0; }
+  .dark { background: #1e1e1e; color: #d4d4d4; }
+  pre { margin: 0; font: 14px/1.5 Consolas, monospace; }
+</style>
+</head>
+<body>
+<script>
+const params = new URLSearchParams(location.search);
+const sceneIndex = +(params.get("scene") || 0);
+const xhr = new XMLHttpRequest();
+xhr.open("GET", "photos.json", false);
+xhr.send();
+const photos = JSON.parse(xhr.responseText);
+const byFile = Object.fromEntries(photos.map(p => [p.file.replace(".jpg", ""), p]));
+const ofLabel = label => photos.filter(p => p.labels[0] === label).map(p => p.file.replace(".jpg", ""));
+
+// Deterministic shuffle so every render of a scene is identical.
+let seed = 1000 + sceneIndex;
+const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const shuffled = list => list.map(x => [rand(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+
+// Filler text is random words on purpose: the test is about pictures, and real sentences could
+// mention a query ("dog") and blur what the image model found with what OCR would find.
+const words = "the quarterly report shows steady growth across all regions while costs stayed flat and the team shipped two releases on time with fewer support tickets than last year".split(" ");
+const text = n => Array.from({ length: n }, () => words[Math.floor(rand() * words.length)]).join(" ");
+const para = (n, style = "") => `<p style="margin:0 0 10px;${style}">${text(n)}.</p>`;
+
+function ph(name, w, h, style = "") {
+  const p = byFile[name];
+  return `<img src="../data/photos/${name}.jpg" width="${w}" height="${h}" style="width:${w}px;height:${h}px;${style}"
+    data-gt="${p.labels.join(",")}" data-ignore="${p.ignore.join(",")}">`;
+}
+
+function barChart(w, h, n = 6) {
+  const bw = (w - 60) / n;
+  let bars = "";
+  for (let i = 0; i < n; i++) {
+    const bh = 30 + rand() * (h - 80);
+    bars += `<rect x="${40 + i * bw + 6}" y="${h - 30 - bh}" width="${bw - 12}" height="${bh}" fill="#4a7bd0"/>
+      <text x="${40 + i * bw + bw / 2}" y="${h - 12}" font-size="12" text-anchor="middle">Q${i + 1}</text>`;
+  }
+  return `<svg width="${w}" height="${h}" data-gt="chart,bar chart" style="display:block;background:#fff">
+    <line x1="40" y1="10" x2="40" y2="${h - 30}" stroke="#888"/><line x1="40" y1="${h - 30}" x2="${w - 10}" y2="${h - 30}" stroke="#888"/>${bars}</svg>`;
+}
+
+function lineChart(w, h, series = 2) {
+  let paths = "";
+  const colors = ["#d0544a", "#3a9a5b", "#4a7bd0"];
+  for (let s = 0; s < series; s++) {
+    let d = "", y = h / 2;
+    for (let i = 0; i <= 12; i++) {
+      y = Math.max(15, Math.min(h - 40, y + (rand() - 0.45) * 50));
+      d += `${i ? "L" : "M"}${40 + i * (w - 60) / 12},${y} `;
+    }
+    paths += `<path d="${d}" fill="none" stroke="${colors[s]}" stroke-width="2.5"/>`;
+  }
+  let grid = "";
+  for (let i = 1; i < 5; i++) grid += `<line x1="40" x2="${w - 20}" y1="${i * (h - 30) / 5}" y2="${i * (h - 30) / 5}" stroke="#eee"/>`;
+  return `<svg width="${w}" height="${h}" data-gt="chart,line chart" style="display:block;background:#fff">${grid}
+    <line x1="40" y1="10" x2="40" y2="${h - 30}" stroke="#888"/><line x1="40" y1="${h - 30}" x2="${w - 10}" y2="${h - 30}" stroke="#888"/>${paths}</svg>`;
+}
+
+function pieChart(size) {
+  const r = size / 2 - 10, c = size / 2, colors = ["#4a7bd0", "#d0544a", "#f2b233", "#3a9a5b", "#8e5bc4"];
+  let a = 0, slices = "";
+  const parts = colors.map(() => 1 + rand() * 3), total = parts.reduce((x, y) => x + y);
+  parts.forEach((p, i) => {
+    const b = a + p / total * Math.PI * 2;
+    slices += `<path d="M${c},${c} L${c + r * Math.cos(a)},${c + r * Math.sin(a)} A${r},${r} 0 ${b - a > Math.PI ? 1 : 0} 1 ${c + r * Math.cos(b)},${c + r * Math.sin(b)} Z" fill="${colors[i]}"/>`;
+    a = b;
+  });
+  return `<svg width="${size}" height="${size}" data-gt="chart,pie chart" style="display:block">${slices}</svg>`;
+}
+
+function dataTable(rows, cols, style = "") {
+  const heads = ["Region", "Owner", "Status", "Revenue", "Units", "Margin", "Updated", "Notes"].slice(0, cols);
+  let html = `<table data-gt="table" style="${style}"><tr>${heads.map(h => `<th>${h}</th>`).join("")}</tr>`;
+  for (let r = 0; r < rows; r++)
+    html += "<tr>" + heads.map((_, c) => `<td>${c === 0 ? ["North", "South", "East", "West", "Central"][r % 5] : c === 3 ? "$" + (1000 + Math.floor(rand() * 9000)).toLocaleString() : c === 4 ? Math.floor(rand() * 900) : text(1)}</td>`).join("") + "</tr>";
+  return html + "</table>";
+}
+
+function calendar(w, h, cell = true) {
+  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  let html = `<div data-gt="calendar" style="width:${w}px;height:${h}px;display:grid;grid-template-columns:repeat(7,1fr);grid-template-rows:28px repeat(5,1fr);border:1px solid #ccc;font-size:${cell ? 13 : 10}px">`;
+  html += days.map(d => `<div style="border:1px solid #e3e3e3;padding:4px;font-weight:600;background:#f6f6f6">${d}</div>`).join("");
+  for (let i = 0; i < 35; i++) {
+    const day = i - 2;
+    const ev = cell && rand() < 0.3 ? `<div style="background:#dce8fb;border-radius:4px;padding:1px 4px;margin-top:4px">${text(2)}</div>` : "";
+    html += `<div style="border:1px solid #e3e3e3;padding:4px">${day >= 1 && day <= 31 ? day : ""}${ev}</div>`;
+  }
+  return html + "</div>";
+}
+
+function code(lines) {
+  const kws = ["public", "private", "static", "var", "return", "if", "foreach", "await", "new"];
+  let out = "";
+  for (let i = 0; i < lines; i++) {
+    const indent = "    ".repeat(Math.floor(rand() * 3));
+    out += `<span style="color:#858585">${String(i + 1).padStart(3)}</span>  ${indent}<span style="color:#569cd6">${kws[Math.floor(rand() * kws.length)]}</span> ${text(3).replace(/ /g, "_")}(<span style="color:#ce9178">"${text(1)}"</span>);\n`;
+  }
+  return out;
+}
+
+const scenes = [
+  // 0: photo library grid
+  () => `<div class="bar">Photos <span class="muted">All items</span></div>
+    <div class="grid" style="grid-template-columns:repeat(6,300px);padding:16px 20px;gap:14px">
+      ${shuffled(photos.filter(p => p.labels[0] !== "map" && p.labels[0] !== "qr code")).slice(0, 18).map(p => ph(p.file.replace(".jpg", ""), 300, 210, "border-radius:6px")).join("")}</div>`,
+  // 1: news article with hero photo and small related thumbnails
+  () => `<div class="bar">The Daily Ledger <span class="muted">World · Business · Science</span></div>
+    <div class="row" style="padding:24px 80px;gap:40px">
+      <div style="width:1100px"><h1 style="font-size:34px;margin:0 0 12px">${text(9)}</h1>
+        ${ph("elephant_0", 1100, 560)}<p class="muted" style="font-size:13px">${text(12)}</p>${para(60)}${para(40)}</div>
+      <div style="width:520px"><h3>Related</h3>${["mountain_3", "airplane_2", "flower_1", "car_2"].map(n => `<div class="row" style="margin-bottom:16px">${ph(n, 120, 80)}<div>${text(10)}</div></div>`).join("")}
+        <h3>Most read</h3>${para(50)}${para(40)}</div></div>`,
+  // 2: shop
+  () => `<div class="bar">ShopMart <span class="muted">Search products</span></div>
+    <div class="grid" style="grid-template-columns:repeat(4,420px);gap:24px;padding:24px 60px">
+      ${["laptop_4", "bicycle_1", "cup_of_coffee_5", "laptop_7", "bicycle_7", "cup_of_coffee_4", "car_1", "laptop_5"].map(n => `<div class="card">${ph(n, 390, 290, "object-fit:contain;background:#fafafa")}<div style="margin-top:8px">${text(5)}</div><b>$${(50 + Math.floor(rand() * 900))}.99</b></div>`).join("")}</div>`,
+  // 3: analytics dashboard, no photos
+  () => `<div class="bar">Analytics <span class="muted">Last 30 days</span></div>
+    <div style="padding:20px;display:grid;grid-template-columns:900px 940px;gap:20px">
+      <div class="card">${barChart(870, 380)}</div><div class="card">${lineChart(910, 380, 3)}</div>
+      <div class="card row">${pieChart(360)}<div>${para(30)}</div></div><div class="card">${dataTable(9, 6, "width:900px")}</div></div>`,
+  // 4: presentation editor
+  () => `<div class="bar">Slides — Q3 review</div><div class="row" style="padding:16px;background:#e9e9ec;height:1032px">
+      <div style="width:220px">${[0, 1, 2, 3].map(i => `<div style="width:200px;height:112px;background:#fff;margin-bottom:12px;padding:6px">${i === 1 ? barChart(100, 90, 4) : i === 2 ? ph("sailboat_2", 100, 90) : `<b style="font-size:10px">${text(3)}</b>`}</div>`).join("")}</div>
+      <div style="width:1600px;height:900px;background:#fff;padding:50px;box-shadow:0 2px 8px #0003"><h1 style="font-size:48px;margin:0 0 30px">${text(5)}</h1>
+        <div class="row" style="gap:60px">${barChart(760, 560, 5)}${ph("sailboat_2", 640, 560)}</div></div></div>`,
+  // 5: chat app with inline photos and a tiny avatar
+  () => `<div class="row" style="height:1080px"><div style="width:380px;background:#f3f3f3;padding:12px">
+      ${Array.from({ length: 9 }, (_, i) => `<div class="row" style="padding:10px 0;align-items:center">${i === 2 ? ph("cat_3", 44, 44, "border-radius:50%") : `<div style="width:44px;height:44px;border-radius:50%;background:#b8c6db"></div>`}<div>${text(4)}</div></div>`).join("")}</div>
+      <div style="flex:1;padding:24px">${[0, 1, 2].map(() => `<div class="card" style="width:640px;margin-bottom:14px">${text(14)}</div>`).join("")}
+        <div style="margin-left:auto;width:360px">${ph("dog_0", 360, 260, "border-radius:12px")}</div>
+        <div class="card" style="width:600px;margin:14px 0">${text(12)}</div>${ph("pizza_5", 260, 190, "border-radius:12px")}
+        <div class="card" style="width:640px;margin-top:14px">${text(16)}</div></div></div>`,
+  // 6: email inbox, text only
+  () => `<div class="bar">Inbox <span class="muted">1,204 messages</span></div><div class="row"><div style="width:260px;padding:16px">${["Inbox", "Starred", "Sent", "Drafts", "Archive", "Spam"].map(x => `<div style="padding:8px">${x}</div>`).join("")}</div>
+      <div style="flex:1">${Array.from({ length: 22 }, () => `<div style="padding:10px 16px;border-bottom:1px solid #eee;display:flex;gap:30px"><b style="width:220px">${text(2)}</b><span>${text(14)}</span></div>`).join("")}</div></div>`,
+  // 7: map app with place list
+  () => `<div class="row" style="height:1080px">${ph("streetmap_0", 1300, 1080)}
+      <div style="width:620px;padding:16px">${["pizza_3", "cup_of_coffee_0", "cake_0", "pizza_6", "cup_of_coffee_4"].map(n => `<div class="row" style="margin-bottom:18px">${ph(n, 140, 110, "border-radius:8px")}<div><b>${text(3)}</b><br>${text(10)}</div></div>`).join("")}</div></div>`,
+  // 8: code editor
+  () => `<div class="dark" style="height:1080px;display:flex"><div style="width:300px;background:#252526;padding:12px">${Array.from({ length: 24 }, () => `<div>${text(1)}.cs</div>`).join("")}</div>
+      <pre data-gt="source code" style="padding:12px;width:1500px;height:1050px;overflow:hidden">${code(48)}</pre></div>`,
+  // 9: video player with recommendations
+  () => `<div class="bar">VideoTube</div><div class="row" style="padding:20px">
+      <div style="width:1280px">${ph("airplane_4", 1280, 720)}<div style="height:6px;background:#c00;width:40%"></div><h2>${text(8)}</h2>${para(30)}</div>
+      <div style="width:560px">${["horse_2", "bird_3", "car_4", "elephant_5", "bicycle_0", "beach_1", "dog_7"].map(n => `<div class="row" style="margin-bottom:12px">${ph(n, 168, 94)}<div style="font-size:13px">${text(7)}</div></div>`).join("")}</div></div>`,
+  // 10: calendar app
+  () => `<div class="bar">Calendar <span class="muted">October 2026</span></div><div class="row" style="padding:16px">
+      <div style="width:300px">${calendar(260, 220, false)}${para(30, "margin-top:20px")}</div>${calendar(1560, 980)}</div>`,
+  // 11: social feed with stories
+  () => `<div class="bar">Friendbook</div><div style="padding:16px 400px">
+      <div class="row" style="margin-bottom:16px">${["cat_6", "dog_3", "horse_3", "bird_7", "flower_5", "cat_0"].map(n => ph(n, 72, 72, "border-radius:50%")).join("")}</div>
+      <div class="card" style="width:720px;float:left">${text(14)}${ph("beach_1", 690, 420, "margin-top:8px")}${text(10)}</div>
+      <div style="float:right;width:380px">${["mountain_0", "pizza_4", "cat_4"].map(n => `<div class="card" style="margin-bottom:12px">${ph(n, 350, 220)}</div>`).join("")}</div></div>`,
+  // 12: spreadsheet with an embedded chart
+  () => `<div class="bar">Budget.xlsx</div><div style="position:relative;padding:8px">${dataTable(30, 8, "width:1900px")}
+      <div style="position:absolute;left:1000px;top:200px;border:1px solid #999;background:#fff;padding:8px">${lineChart(800, 420, 2)}</div></div>`,
+  // 13: desktop wallpaper with windows on top
+  () => `<div style="position:relative;width:1920px;height:1080px">${ph("mountain_2", 1920, 1032)}
+      <div style="position:absolute;left:120px;top:140px;width:700px;height:460px;background:#fff;border:1px solid #888;box-shadow:0 6px 20px #0006"><div class="bar">Notepad</div><div style="padding:12px">${para(60)}</div></div>
+      <div style="position:absolute;left:1000px;top:420px;width:760px;height:420px;background:#fff;border:1px solid #888;box-shadow:0 6px 20px #0006"><div class="bar">Pictures</div><div class="grid" style="grid-template-columns:repeat(4,170px);padding:12px">${["cat_7", "dog_6", "flower_0", "bird_0", "car_3", "horse_5", "elephant_2", "airplane_1"].map(n => ph(n, 170, 150)).join("")}</div></div>
+      <div style="position:absolute;left:0;bottom:0;width:1920px;height:48px;background:#202020"></div></div>`,
+  // 14: scanned PDF page with figures and a QR code
+  () => `<div style="background:#6b6b6b;height:1080px;padding:20px 460px"><div style="background:#fdfdf8;height:1040px;padding:60px 80px;font-family:Georgia,serif;filter:contrast(.92) blur(.25px)">
+      <h2>${text(6)}</h2>${para(70)}<div class="row" style="gap:30px">${lineChart(460, 280, 1)}${ph("elephant_6", 420, 280)}</div>${para(80, "margin-top:14px")}
+      <div class="row" style="align-items:center">${ph("qr_0", 120, 120, "object-fit:contain")}<span>${text(12)}</span></div></div></div>`,
+  // 15: dense dark gallery of small thumbnails (small-object stress test)
+  () => `<div class="dark" style="height:1080px;padding:12px"><div class="grid" style="grid-template-columns:repeat(13,140px);gap:6px">
+      ${shuffled(photos.filter(p => p.labels[0] !== "map")).slice(0, 78).map(p => ph(p.file.replace(".jpg", ""), 140, 100)).join("")}</div></div>`,
+  // 16: photos app with tight 3 px gutters, where neighbouring thumbnails nearly touch
+  () => `<div class="bar">Photos <span class="muted">2026</span></div><div class="grid" style="grid-template-columns:repeat(10,188px);gap:3px;padding:8px 14px">
+      ${shuffled(photos.filter(p => !["map", "qr code"].includes(p.labels[0]))).slice(0, 60).map(p => ph(p.file.replace(".jpg", ""), 188, 160)).join("")}</div>`,
+];
+
+document.body.innerHTML = scenes[sceneIndex]();
+
+// Ground truth: one entry per labelled element, clipped to the screen.
+const gt = [];
+for (const el of document.querySelectorAll("[data-gt]")) {
+  const r = el.getBoundingClientRect();
+  const x = Math.max(0, r.left), y = Math.max(0, r.top), right = Math.min(1920, r.right), bottom = Math.min(1080, r.bottom);
+  if (right - x < 4 || bottom - y < 4) continue;
+  gt.push({ labels: el.dataset.gt.split(",").filter(Boolean), ignore: (el.dataset.ignore || "").split(",").filter(Boolean),
+            box: [Math.round(x), Math.round(y), Math.round(right - x), Math.round(bottom - y)] });
+}
+const out = document.createElement("script");
+out.id = "gt";
+out.type = "application/json";
+out.textContent = JSON.stringify({ scene: sceneIndex, count: scenes.length, objects: gt });
+document.body.appendChild(out);
+</script>
+</body>
+</html>

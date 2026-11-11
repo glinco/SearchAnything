@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    Throwaway spike: measures how well small local models find objects and concepts on
+    screenshots. Not part of SearchAnything.slnx, so CI and the app are unaffected.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>VisionSpike</RootNamespace>
+    <PlatformTarget>x64</PlatformTarget>
+    <NoWarn>$(NoWarn);WFO0003;CA1416</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The DirectML package also contains the CPU provider, so one build measures both. -->
+    <PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
+  </ItemGroup>
+
+  <!-- Reuse the app's real OCR and capture code, so text masking matches what the app sees. -->
+  <ItemGroup>
+    <Compile Include="..\..\..\src\SearchAnything\OcrService.cs" Link="App\OcrService.cs" />
+    <Compile Include="..\..\..\src\SearchAnything\ScreenCapture.cs" Link="App\ScreenCapture.cs" />
+    <Compile Include="..\..\..\src\SearchAnything\NativeMethods.cs" Link="App\NativeMethods.cs" />
+  </ItemGroup>
+
+</Project>
