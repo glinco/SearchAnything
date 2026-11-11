@@ -13,7 +13,7 @@ Want to check these claims? See [SECURITY.md](SECURITY.md).
 
 ## Get it
 
-There are no prebuilt downloads. You build SearchAnything yourself from this source code, so you know exactly what runs on your PC. It takes about a minute: see [Build from source](#build-from-source).
+There are no prebuilt downloads. You build SearchAnything yourself from this source code, so you know exactly what runs on your PC. It takes about a minute: see [Build from source](#build-from-source), or [Install it](#install-it) to build it and add it to your Start menu in one step.
 
 **Requirements:** Windows 10 (version 2004) or Windows 11, with at least one Windows language that includes text recognition. English and Spanish usually do.
 
@@ -110,6 +110,22 @@ dotnet publish src/SearchAnything -c Release -r win-x64 -o publish
 ```
 
 There's nothing to install. Run `publish\SearchAnything.exe` and it waits in the system tray (the yellow magnifying glass).
+
+### Install it
+
+To keep it somewhere you'll find it again, run the install script from the repository folder:
+
+```bash
+powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+It runs the tests, builds the `.exe` for your PC (x64 or ARM), copies it to `%LOCALAPPDATA%\Programs\SearchAnything`, adds **SearchAnything** to your Start menu and starts it. It needs no administrator rights and changes nothing outside your user profile. Run it again after `git pull` to update.
+
+To remove it (your settings in `%APPDATA%\SearchAnything` are kept):
+
+```bash
+powershell -ExecutionPolicy Bypass -File install.ps1 -Uninstall
+```
 
 Developer self-test, which runs OCR on an image and writes timings, the recognized text and matches to a new file (it never reads your screen, and it won't overwrite an existing file):
 

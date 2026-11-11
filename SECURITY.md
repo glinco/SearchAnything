@@ -83,6 +83,8 @@ dotnet publish src/SearchAnything -c Release -r win-x64 -o publish
 
 Use `-r win-arm64` on ARM PCs. The app is `publish\SearchAnything.exe`. Because you built it, Windows SmartScreen has no download to warn about.
 
+[`install.ps1`](install.ps1) runs these same two commands, then copies the `.exe` to `%LOCALAPPDATA%\Programs\SearchAnything` and adds a Start menu shortcut. It downloads nothing besides what `dotnet` itself restores, needs no administrator rights, and is short enough to read before you run it.
+
 Before building, you can see exactly what changed since you last looked with `git log` and `git diff`.
 
 ### Check that it stays offline
