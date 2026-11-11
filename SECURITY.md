@@ -29,6 +29,9 @@ flowchart LR
         Overlay -->|"on close"| Wipe["Pixels wiped,<br/>text discarded"]
         App["SearchAnything"] -.->|"your shortcut"| Settings["%APPDATA%\SearchAnything\settings.json"]
         App -.->|"if Start with Windows is on"| Run["HKCU Run registry key"]
+        Drives["The drives you choose"] -->|".exe names and version info"| Programs["Program list<br/>in memory"]
+        Programs --> Overlay
+        Overlay -.->|"only when you press Ctrl+P"| Start["Start menu shortcut"]
     end
     Net(["Internet"])
     App x--x|"no network code"| Net
@@ -39,8 +42,10 @@ flowchart LR
 | Capture one monitor when you press the shortcut or click the tray icon | Capture in the background, on a timer, or while closed |
 | Keep the screenshot and its text in memory while the search is open, then wipe the pixels | Save screenshots or recognized text to disk |
 | Copy text to the clipboard only when you press Ctrl+C or Ctrl+Shift+C | Put copied text in Win+V history or the cloud clipboard |
-| Save your shortcut to `%APPDATA%\SearchAnything\settings.json` | Store anything else, keep logs, or collect telemetry |
+| Save your settings to `%APPDATA%\SearchAnything\settings.json` | Store anything else, keep logs, or collect telemetry |
 | Add one per-user `Run` value if you turn on **Start with Windows** | Ask for administrator rights, install services or drivers |
+| List `.exe` files on the drives you choose (internal drives unless you turn them off) and read their name and version info, for program search, kept in memory only | Read what's inside your documents, save the program list to disk, or scan network drives |
+| Start a program, open its folder, or add a Start menu shortcut, only when you press Enter, Ctrl+O or Ctrl+P | Start anything, or change shortcuts, on its own |
 | Use the OCR engine built into Windows | Download AI models, or send images anywhere |
 
 The only exception to "nothing on disk" is a developer tool. `SearchAnything.exe --selftest report.txt image.png` reads **an image file you give it** (never your screen) and writes its text to a **new** report file. It refuses to overwrite an existing file.
@@ -84,7 +89,7 @@ Before building, you can see exactly what changed since you last looked with `gi
 
 You don't have to take our word for it:
 
-- **Read the code.** It's about 1,500 lines. Searching `src/` for `Http`, `Socket` or `WebClient` finds nothing.
+- **Read the code.** It's about 2,500 lines. Searching `src/` for `Http`, `Socket` or `WebClient` finds nothing.
 - **Watch it.** Open **Resource Monitor → Network** while you use the app. SearchAnything never shows up.
 - **Block it.** Add an outbound Windows Firewall rule for `SearchAnything.exe`. The app works exactly the same.
 

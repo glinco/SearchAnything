@@ -26,9 +26,35 @@ There are no prebuilt downloads. You build SearchAnything yourself from this sou
 | **Enter** / **Shift+Enter** (or F3) | Next / previous match |
 | **Ctrl+C** | Copy the line containing the current match |
 | **Ctrl+Shift+C** | Copy all text on the screen |
+| **Ctrl+Enter** | Search programs instead (see below) |
 | **Esc** or click | Close |
 
-Right-click the tray icon to **change the shortcut**, turn on **Start with Windows**, or exit.
+Right-click the tray icon to **change the shortcut**, turn on **Start with Windows**, turn **Keep program list ready** on or off, choose the **Drives to scan for programs**, or exit.
+
+### Find programs Windows lost track of
+
+Reinstalled Windows on C: and your programs on D: or E: no longer show up in Start? They're still there; only the shortcuts pointing at them were lost.
+
+When nothing on screen matches, a **Search programs** button appears in the bar. Press **Enter** (or click it) to search the programs on all your drives with the same text. **Ctrl+Enter** does it at any time.
+
+| Key | Action |
+|---|---|
+| Type | Filter programs by name, file name or folder |
+| **↑** / **↓** | Choose a program |
+| **Tab** / **Shift+Tab** (or click a chip) | Show only the programs on one drive |
+| **Enter** or click | Open it |
+| **Ctrl+O** | Show it in its folder |
+| **Ctrl+P** | Add it to the Start menu, so Windows Search finds it again on its own |
+| **Ctrl+C** | Copy its path |
+| **Esc** | Back to searching the screen |
+
+Programs are named from their own version info, so `WINWORD.EXE` shows up as "Microsoft Word". Installers, uninstallers, updaters and crash reporters are left out, and a program's helper files fold into one row.
+
+**Drives.** When matches are on more than one drive, chips above the list show how many are on each (`All 42 · C: 30 · D: 12`), and picking one narrows the list to that drive. To choose which drives are scanned at all, right-click the tray icon and open **Drives to scan for programs**. Internal drives are scanned unless you turn them off. USB sticks and memory cards are skipped until you turn them on, and network drives are never scanned. Turning a drive off forgets its programs right away.
+
+**Memory.** The list lives in memory only, never on disk: about 2 MB for 2,400 programs. It's built in the background at low CPU and disk priority, starting 20 seconds after launch. A background scan waits while your PC's memory is more than 80% used, and the list is dropped completely above 90%. With **Keep program list ready** off, nothing is kept: programs are scanned when you search them and forgotten when the search closes.
+
+Some programs may not start after a Windows reinstall, because they needed files or settings that were on the old C: drive. Reinstalling them into the same folder usually fixes that.
 
 ## How it works
 
@@ -52,9 +78,12 @@ Ctrl+Alt+F ─► screenshot of the monitor under the mouse
 | [`SearchIndex.cs`](src/SearchAnything/SearchIndex.cs) | Accent/case-insensitive matching on one reading → highlight boxes |
 | [`CombinedIndex.cs`](src/SearchAnything/CombinedIndex.cs) | Searches all readings and merges hits on the same spot |
 | [`OverlayWindow.xaml(.cs)`](src/SearchAnything/OverlayWindow.xaml.cs) | The full-screen search UI |
+| [`ProgramSearch.cs`](src/SearchAnything/ProgramSearch.cs) | Which folders and .exe files count as programs, naming and ranking them |
+| [`ProgramCatalog.cs`](src/SearchAnything/ProgramCatalog.cs) | Background scan of all drives, kept in memory, backing off when memory is tight |
+| [`StartMenu.cs`](src/SearchAnything/StartMenu.cs) | Adds a program's shortcut to your Start menu (Ctrl+P) |
 | [`TrayIcon.cs`](src/SearchAnything/TrayIcon.cs), [`HotkeyDialog.xaml(.cs)`](src/SearchAnything/HotkeyDialog.xaml.cs), [`Settings.cs`](src/SearchAnything/Settings.cs) | Tray menu, shortcut picker, saved settings |
 
-The only thing written to disk is your shortcut, in `%APPDATA%\SearchAnything\settings.json`. "Start with Windows" adds a value under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`. Text you copy from a search is kept out of Windows clipboard history and the cloud clipboard.
+SearchAnything writes only your settings (your shortcut and tray menu choices), in `%APPDATA%\SearchAnything\settings.json`. "Start with Windows" adds a value under `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`, and **Ctrl+P** in program search adds a shortcut to your Start menu (`%APPDATA%\Microsoft\Windows\Start Menu\Programs`). Text you copy from a search is kept out of Windows clipboard history and the cloud clipboard.
 
 ## Known limitations
 

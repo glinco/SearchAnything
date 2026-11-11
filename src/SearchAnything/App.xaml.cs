@@ -28,6 +28,7 @@ public partial class App : Application
     private TrayIcon? _tray;
     private IReadOnlyList<OcrService> _ocr = Array.Empty<OcrService>();
     private OverlayWindow? _overlay;
+    private ProgramCatalog? _programs;
     private Settings _settings = new();
     private Hotkey _currentHotkey = Hotkey.Default;
     private string _lastQuery = "";
@@ -70,13 +71,18 @@ public partial class App : Application
             StartWithWindows.Set(true);
 
         _ocr = OcrService.CreateAll();
+        _programs = new ProgramCatalog(_settings.KeepProgramListReady, _settings.ScanDrives);
         _tray = new TrayIcon(
             onSearch: () => ToggleOverlay(fromTray: true),
             onChangeHotkey: ChangeHotkey,
             onStartWithWindowsChanged: StartWithWindows.Set,
+            onKeepProgramsChanged: KeepProgramsReady,
+            listDrives: () => _programs!.Drives(),
+            onDriveChanged: ScanDrive,
             onExit: Shutdown);
         _tray.SetHotkeyText(_currentHotkey.ToString());
         _tray.SetStartWithWindows(StartWithWindows.IsEnabled);
+        _tray.SetKeepPrograms(_settings.KeepProgramListReady);
 
         _hotkey = new HotkeyManager();
         _hotkey.Pressed += () => ToggleOverlay(fromTray: false);
@@ -119,11 +125,12 @@ public partial class App : Application
             return;
         }
 
-        _overlay = new OverlayWindow(shot, _ocr, _lastQuery);
+        _overlay = new OverlayWindow(shot, _ocr, _lastQuery, _programs!);
         _overlay.Closed += (_, _) =>
         {
             _lastQuery = _overlay?.Query ?? _lastQuery;
             _overlay = null;
+            _programs?.ReleaseIfNotKept();
         };
         _overlay.Show();
         _overlay.Activate();
@@ -151,6 +158,22 @@ public partial class App : Application
         if (chosen is { } taken)
             _tray.Notify($"{taken} is already used by another app. Keeping {_currentHotkey}.");
         _hotkey.Register(_currentHotkey);
+    }
+
+    private void KeepProgramsReady(bool keep)
+    {
+        _settings.KeepProgramListReady = keep;
+        _settings.Save();
+        _programs?.SetKeepReady(keep);
+    }
+
+    private void ScanDrive(string drive, bool scan)
+    {
+        if (_programs == null)
+            return;
+        _programs.SetDriveScanned(drive, scan);
+        _settings.ScanDrives = _programs.DriveChoices();
+        _settings.Save();
     }
 
     /// <summary>Lets a second launch of the .exe tell this one to say "already running".</summary>
@@ -250,6 +273,7 @@ public partial class App : Application
     {
         _hotkey?.Dispose();
         _tray?.Dispose();
+        _programs?.Dispose();
         _alreadyRunningSignal?.Dispose();
         _singleInstance?.Dispose();
         base.OnExit(e);

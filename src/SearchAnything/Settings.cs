@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using Microsoft.Win32;
@@ -12,6 +13,15 @@ internal sealed class Settings
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SearchAnything", "settings.json");
 
     public string Hotkey { get; set; } = SearchAnything.Hotkey.Default.ToString();
+
+    /// <summary>Keep the list of installed programs in memory, so program search answers instantly.</summary>
+    public bool KeepProgramListReady { get; set; } = true;
+
+    /// <summary>
+    /// Drives turned on or off for program search ("D:" → scan). Drives not listed follow the default:
+    /// internal drives are scanned, USB sticks and memory cards are not.
+    /// </summary>
+    public Dictionary<string, bool> ScanDrives { get; set; } = new();
 
     public static Settings Load()
     {
