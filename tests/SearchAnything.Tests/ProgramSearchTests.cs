@@ -163,6 +163,60 @@ public class ProgramSearchTests
         Assert.Equal(30, total);
     }
 
+    [Theory]
+    [InlineData(@"e:\Games\x.exe", "E:")]
+    [InlineData(@"D:\", "D:")]
+    [InlineData(@"\\server\share\x.exe", "")]
+    public void Knows_the_drive_of_a_program(string path, string drive) =>
+        Assert.Equal(drive, ProgramEntry.DriveOf(path));
+
+    [Fact]
+    public void Counts_matches_per_drive_and_narrows_to_one()
+    {
+        var programs = new[]
+        {
+            Program("Blender", @"C:\Program Files\Blender\blender.exe"),
+            Program("Blender", @"D:\Apps\Blender\blender.exe"),
+            Program("Blender Launcher", @"D:\Tools\BlenderLauncher\launcher.exe"),
+            Program("Steam", @"E:\Steam\steam.exe"),
+        };
+
+        var all = ProgramMatcher.Find(programs, "blender", 10, drive: null, out int total, out var drives);
+        Assert.Equal(3, total);
+        Assert.Equal(3, all.Count);
+        Assert.Equal(new[] { new DriveCount("C:", 1), new DriveCount("D:", 2) }, drives);
+
+        // Narrowing keeps the counts for every drive, so the other chips still show theirs.
+        var onD = ProgramMatcher.Find(programs, "blender", 10, drive: "d:", out total, out drives);
+        Assert.Equal(2, total);
+        Assert.All(onD, p => Assert.Equal("D:", p.Drive));
+        Assert.Equal(2, drives.Count);
+    }
+
+    [Fact]
+    public void Remembers_drives_turned_off_and_scans_internal_drives_by_default()
+    {
+        var system = ProgramEntry.DriveOf(Environment.SystemDirectory);
+
+        using (var programs = new ProgramCatalog(keepReady: false))
+            Assert.True(programs.Drives().Single(d => d.Drive == system).Scan);
+
+        using (var programs = new ProgramCatalog(keepReady: false, new Dictionary<string, bool> { [system] = false }))
+        {
+            var drive = programs.Drives().Single(d => d.Drive == system);
+            Assert.False(drive.Scan);
+            Assert.True(drive.System);
+            Assert.Equal(false, programs.DriveChoices()[system]);
+        }
+    }
+
+    [Theory]
+    [InlineData("D:", "Games", false, false, "D:  Games")]
+    [InlineData("C:", "", false, true, "C:  (Windows)")]
+    [InlineData("F:", "Tom & Jerry", true, false, "F:  Tom && Jerry  (removable)")]
+    public void Names_drives_in_the_tray_menu(string drive, string label, bool removable, bool system, string expected) =>
+        Assert.Equal(expected, TrayIcon.DriveText(new DriveChoice(drive, label, removable, system, Scan: true)));
+
     [Fact]
     public void Scanner_keeps_programs_and_skips_junk()
     {

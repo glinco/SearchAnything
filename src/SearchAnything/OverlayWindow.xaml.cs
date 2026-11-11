@@ -25,7 +25,7 @@ public partial class OverlayWindow : Window
     private const int ProgramRows = 8;
 
     private const string ScreenHint = "Enter next · Shift+Enter previous · Ctrl+C copy line · Ctrl+Shift+C copy all · Ctrl+Enter programs · Esc close";
-    private const string ProgramHint = "↑↓ choose · Enter open · Ctrl+O show in folder · Ctrl+P add to Start menu · Ctrl+C copy path · Esc back";
+    private const string ProgramHint = "↑↓ choose · Enter open · Tab drive · Ctrl+O show in folder · Ctrl+P add to Start menu · Ctrl+C copy path · Esc back";
 
     private static readonly Brush MatchStroke = Freeze(new SolidColorBrush(Color.FromRgb(0xFF, 0xD5, 0x4F)));
     private static readonly Brush CurrentStroke = Freeze(new SolidColorBrush(Color.FromRgb(0xFF, 0x8A, 0x00)));
@@ -34,6 +34,13 @@ public partial class OverlayWindow : Window
     private static readonly Brush StatusNone = Freeze(new SolidColorBrush(Color.FromRgb(0xFF, 0x6B, 0x6B)));
     private static readonly Brush RowPicked = Freeze(new SolidColorBrush(Color.FromArgb(0x30, 0xFF, 0xFF, 0xFF)));
     private static readonly Brush RowFolder = Freeze(new SolidColorBrush(Color.FromArgb(0x88, 0xFF, 0xFF, 0xFF)));
+    private static readonly Brush ChipOn = Freeze(new SolidColorBrush(Color.FromArgb(0x26, 0xFF, 0xBE, 0x00)));
+    private static readonly Brush ChipOnBorder = Freeze(new SolidColorBrush(Color.FromArgb(0x66, 0xFF, 0xBE, 0x00)));
+    private static readonly Brush ChipOnText = Freeze(new SolidColorBrush(Color.FromRgb(0xFF, 0xBE, 0x00)));
+    private static readonly Brush ChipOff = Freeze(new SolidColorBrush(Color.FromArgb(0x14, 0xFF, 0xFF, 0xFF)));
+    private static readonly Brush ChipOffBorder = Freeze(new SolidColorBrush(Color.FromArgb(0x22, 0xFF, 0xFF, 0xFF)));
+    private static readonly Brush ChipOffText = Freeze(new SolidColorBrush(Color.FromArgb(0xCC, 0xFF, 0xFF, 0xFF)));
+    private static readonly Brush ChipCount = Freeze(new SolidColorBrush(Color.FromArgb(0x88, 0xFF, 0xFF, 0xFF)));
 
     private readonly CapturedScreen _shot;
     private readonly IReadOnlyList<OcrService> _ocr;
@@ -46,6 +53,10 @@ public partial class OverlayWindow : Window
     private bool _programMode;
     private List<ProgramEntry> _programHits = new();
     private int _programPick;
+    /// <summary>Only programs on this drive ("D:"), or null for all drives.</summary>
+    private string? _driveFilter;
+    /// <summary>The drive chips shown, in order: null ("All") first.</summary>
+    private List<string?> _chipDrives = new();
     /// <summary>Icons for rows shown during this search only; dropped when it closes.</summary>
     private readonly Dictionary<string, ImageSource?> _icons = new();
 
@@ -307,6 +318,10 @@ public partial class OverlayWindow : Window
         _programs.Changed -= OnProgramsChanged;
         _programHits = new();
         _icons.Clear();
+        _driveFilter = null;
+        _chipDrives = new();
+        DriveChips.Children.Clear();
+        DriveChips.Visibility = Visibility.Collapsed;
         ProgramList.Children.Clear();
         ProgramList.Visibility = Visibility.Collapsed;
         Placeholder.Text = "Find on screen…";
@@ -328,10 +343,11 @@ public partial class OverlayWindow : Window
     private void RunProgramSearch(bool keepPick)
     {
         var picked = keepPick && _programPick < _programHits.Count ? _programHits[_programPick].Path : null;
-        var results = _programs.Find(SearchBox.Text, ProgramRows);
+        var results = _programs.Find(SearchBox.Text, ProgramRows, _driveFilter);
         _programHits = results.Top.ToList();
         _programPick = Math.Max(0, picked == null ? 0 : _programHits.FindIndex(p => p.Path == picked));
 
+        ShowDriveChips(results.Drives);
         ProgramList.Children.Clear();
         for (int i = 0; i < _programHits.Count; i++)
             ProgramList.Children.Add(ProgramRow(_programHits[i], i));
@@ -340,7 +356,7 @@ public partial class OverlayWindow : Window
         if (results.ScanningDrive != null)
             Status.Text = results.Known == 0 ? $"Scanning {results.ScanningDrive}…" : $"{results.Total} · scanning {results.ScanningDrive}…";
         else if (results.Known == 0)
-            Status.Text = "No programs found";
+            Status.Text = _programs.Drives().Any(d => d.Scan) ? "No programs found" : "No drives chosen";
         else if (results.Total == 0)
         {
             Status.Text = "No matches";
@@ -348,6 +364,71 @@ public partial class OverlayWindow : Window
         }
         else
             Status.Text = results.Total == 1 ? "1 program" : $"{results.Total} programs";
+    }
+
+    /// <summary>
+    /// "All 42 · C: 30 · D: 12": shown once matches are on more than one drive, or while narrowed to one,
+    /// so there's always a way back to all of them.
+    /// </summary>
+    private void ShowDriveChips(IReadOnlyList<DriveCount> drives)
+    {
+        var counts = drives.ToList();
+        if (_driveFilter != null && !counts.Any(d => d.Drive == _driveFilter))
+            counts = counts.Append(new DriveCount(_driveFilter, 0)).OrderBy(d => d.Drive, StringComparer.Ordinal).ToList();
+
+        DriveChips.Children.Clear();
+        _chipDrives = new List<string?> { null };
+        _chipDrives.AddRange(counts.Select(d => d.Drive));
+        if (counts.Count < 2 && _driveFilter == null)
+        {
+            DriveChips.Visibility = Visibility.Collapsed;
+            return;
+        }
+        DriveChips.Visibility = Visibility.Visible;
+        DriveChips.Children.Add(DriveChip(null, "All", counts.Sum(d => d.Count)));
+        foreach (var drive in counts)
+            DriveChips.Children.Add(DriveChip(drive.Drive, drive.Drive, drive.Count));
+    }
+
+    private Border DriveChip(string? drive, string label, int count)
+    {
+        bool on = drive == _driveFilter;
+        var text = new TextBlock { FontSize = 12, Foreground = on ? ChipOnText : ChipOffText, VerticalAlignment = VerticalAlignment.Center };
+        text.Inlines.Add(new System.Windows.Documents.Run(label));
+        text.Inlines.Add(new System.Windows.Documents.Run($"  {count}") { Foreground = ChipCount });
+        var chip = new Border
+        {
+            Child = text,
+            Background = on ? ChipOn : ChipOff,
+            BorderBrush = on ? ChipOnBorder : ChipOffBorder,
+            BorderThickness = new Thickness(1),
+            CornerRadius = new CornerRadius(6),
+            Padding = new Thickness(8, 2, 8, 2),
+            Margin = new Thickness(0, 0, 6, 0),
+            Cursor = Cursors.Hand,
+            ToolTip = drive == null ? "Programs on all drives" : $"Only programs on {drive}",
+        };
+        chip.MouseLeftButtonUp += (_, _) =>
+        {
+            FilterDrive(drive);
+            SearchBox.Focus();
+        };
+        return chip;
+    }
+
+    /// <summary>Tab and Shift+Tab move along the drive chips.</summary>
+    private void StepDrive(int direction)
+    {
+        if (DriveChips.Visibility != Visibility.Visible || _chipDrives.Count < 2)
+            return;
+        int at = Math.Max(0, _chipDrives.IndexOf(_driveFilter));
+        FilterDrive(_chipDrives[(at + direction + _chipDrives.Count) % _chipDrives.Count]);
+    }
+
+    private void FilterDrive(string? drive)
+    {
+        _driveFilter = drive;
+        RunProgramSearch(keepPick: false);
     }
 
     private Border ProgramRow(ProgramEntry program, int index)
@@ -406,6 +487,10 @@ public partial class OverlayWindow : Window
             case Key.Up:
                 e.Handled = true;
                 PickProgram(-1);
+                break;
+            case Key.Tab:
+                e.Handled = true;
+                StepDrive(Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) ? -1 : 1);
                 break;
             case Key.Enter:
                 e.Handled = true;

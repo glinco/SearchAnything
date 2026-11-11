@@ -9,7 +9,16 @@ using System.Threading;
 namespace SearchAnything;
 
 /// <summary>What a program search found, and whether more may still arrive.</summary>
-internal sealed record ProgramResults(IReadOnlyList<ProgramEntry> Top, int Total, int Known, string? ScanningDrive);
+/// <param name="Drives">Matches per drive, before narrowing to one drive.</param>
+internal sealed record ProgramResults(IReadOnlyList<ProgramEntry> Top, int Total, int Known, string? ScanningDrive,
+    IReadOnlyList<DriveCount> Drives);
+
+/// <summary>A drive that can hold programs, and whether it's scanned.</summary>
+/// <param name="Drive">"D:"</param>
+/// <param name="Label">The volume name ("Games"), or empty.</param>
+/// <param name="Removable">A USB stick or memory card: not scanned unless the user turns it on.</param>
+/// <param name="System">The drive Windows runs from.</param>
+internal sealed record DriveChoice(string Drive, string Label, bool Removable, bool System, bool Scan);
 
 /// <summary>
 /// The programs on this PC's drives, kept in memory only. It scans in the background at low priority,
@@ -31,10 +40,17 @@ internal sealed class ProgramCatalog : IDisposable
         public readonly CancellationTokenSource Cancel = new();
         public volatile bool Urgent;
         public volatile string? Drive;
+        /// <summary>A drive was turned on after this scan picked its drives: scan again when it ends.</summary>
+        public volatile bool Redo;
     }
+
+    /// <summary>Thrown inside a scan to leave a drive that was just turned off.</summary>
+    private sealed class DriveTurnedOff : Exception { }
 
     private readonly object _gate = new();
     private readonly Timer _memoryCheck;
+    /// <summary>Drives the user turned on or off ("D:" → scan); every other drive follows the default.</summary>
+    private readonly Dictionary<string, bool> _driveChoices;
     private List<ProgramEntry>? _ready;
     private DateTime _readyAt;
     private ScanRun? _run;
@@ -44,9 +60,13 @@ internal sealed class ProgramCatalog : IDisposable
 
     public bool KeepReady { get; private set; }
 
-    public ProgramCatalog(bool keepReady)
+    /// <param name="driveChoices">Saved choices from the tray menu's "Drives to scan".</param>
+    public ProgramCatalog(bool keepReady, IReadOnlyDictionary<string, bool>? driveChoices = null)
     {
         KeepReady = keepReady;
+        _driveChoices = new Dictionary<string, bool>(StringComparer.OrdinalIgnoreCase);
+        foreach (var (drive, scan) in driveChoices ?? new Dictionary<string, bool>())
+            _driveChoices[drive] = scan;
         // The first check also starts the first scan, a little after startup so it doesn't compete with sign-in.
         _memoryCheck = new Timer(_ => CheckMemory(), null, FirstCheck, CheckEvery);
     }
@@ -83,15 +103,84 @@ internal sealed class ProgramCatalog : IDisposable
             Drop();
     }
 
-    public ProgramResults Find(string query, int limit)
+    /// <param name="drive">Only programs on this drive ("D:"), or null for all.</param>
+    public ProgramResults Find(string query, int limit, string? drive = null)
     {
         lock (_gate)
         {
             // While refreshing, keep showing the previous list; on the first scan, show what's found so far.
             var source = _ready ?? _run?.Found ?? new List<ProgramEntry>();
-            var top = ProgramMatcher.Find(source, query, limit, out int total);
-            return new ProgramResults(top, total, source.Count, _run?.Drive);
+            var top = ProgramMatcher.Find(source, query, limit, drive, out int total, out var drives);
+            return new ProgramResults(top, total, source.Count, _run?.Drive, drives);
         }
+    }
+
+    /// <summary>The drives that can hold programs right now (internal and USB), and whether each is scanned.</summary>
+    public IReadOnlyList<DriveChoice> Drives()
+    {
+        var system = ProgramEntry.DriveOf(Environment.SystemDirectory);
+        var drives = new List<DriveChoice>();
+        foreach (var info in DriveInfo.GetDrives())
+        {
+            // Network drives are left out: slow to walk, and they're other people's programs.
+            if (info.DriveType is not (DriveType.Fixed or DriveType.Removable))
+                continue;
+            string label;
+            try
+            {
+                if (!info.IsReady)
+                    continue;
+                label = info.VolumeLabel;
+            }
+            catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+            {
+                continue;
+            }
+            var drive = ProgramEntry.DriveOf(info.Name);
+            bool removable = info.DriveType == DriveType.Removable;
+            drives.Add(new DriveChoice(drive, label, removable, drive == system, IsScanned(drive, removable)));
+        }
+        return drives;
+    }
+
+    /// <summary>The drive choices to save: only drives the user turned on or off.</summary>
+    public Dictionary<string, bool> DriveChoices()
+    {
+        lock (_gate)
+            return new Dictionary<string, bool>(_driveChoices, StringComparer.OrdinalIgnoreCase);
+    }
+
+    /// <summary>Turns scanning a drive on or off. Off forgets its programs at once; on scans again.</summary>
+    public void SetDriveScanned(string drive, bool scan)
+    {
+        bool start;
+        lock (_gate)
+        {
+            _driveChoices[drive] = scan;
+            if (!scan)
+            {
+                _ready?.RemoveAll(p => string.Equals(p.Drive, drive, StringComparison.OrdinalIgnoreCase));
+                _run?.Found.RemoveAll(p => string.Equals(p.Drive, drive, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                // The list no longer covers every chosen drive, so the next search scans again.
+                _readyAt = DateTime.MinValue;
+                if (_run != null)
+                    _run.Redo = true;
+            }
+            // Scan now if the list is kept, or a search is showing it; otherwise the next search does.
+            start = scan && _run == null && (KeepReady || _ready != null);
+        }
+        if (start)
+            StartScan(urgent: false);
+        Changed?.Invoke();
+    }
+
+    private bool IsScanned(string drive, bool removable)
+    {
+        lock (_gate)
+            return _driveChoices.TryGetValue(drive, out var scan) ? scan : !removable;
     }
 
     private void StartScan(bool urgent)
@@ -113,48 +202,64 @@ internal sealed class ProgramCatalog : IDisposable
         if (background)
             NativeMethods.SetThreadPriority(NativeMethods.GetCurrentThread(), NativeMethods.THREAD_MODE_BACKGROUND_BEGIN);
         var sinceReport = Stopwatch.StartNew();
+        bool again = false;
         try
         {
-            foreach (var drive in FixedDrives())
+            foreach (var choice in DrivesToScan())
             {
-                run.Drive = drive.TrimEnd('\\');
-                ProgramScanner.Scan(drive, found: entry =>
+                run.Drive = choice.Drive;
+                try
                 {
-                    lock (_gate)
+                    ProgramScanner.Scan(choice.Drive + "\\", found: entry =>
                     {
-                        if (run.Found.Count < MaxPrograms)
-                            run.Found.Add(entry);
-                    }
-                }, eachFolder: () =>
-                {
-                    cancel.ThrowIfCancellationRequested();
-                    if (background && run.Urgent)
+                        lock (_gate)
+                        {
+                            if (run.Found.Count < MaxPrograms && IsScanned(choice.Drive, choice.Removable))
+                                run.Found.Add(entry);
+                        }
+                    }, eachFolder: () =>
                     {
-                        // Someone opened the program search: stop being polite about disk and CPU.
-                        NativeMethods.SetThreadPriority(NativeMethods.GetCurrentThread(), NativeMethods.THREAD_MODE_BACKGROUND_END);
-                        Thread.CurrentThread.Priority = ThreadPriority.Normal;
-                        background = false;
-                    }
-                    // A background scan waits while the PC is short on memory.
-                    while (!run.Urgent && MemoryGuard.LoadPercent >= MemoryGuard.TightPercent)
-                    {
-                        cancel.WaitHandle.WaitOne(TimeSpan.FromSeconds(2));
                         cancel.ThrowIfCancellationRequested();
-                    }
-                    if (sinceReport.Elapsed > ReportEvery)
-                    {
-                        sinceReport.Restart();
-                        Changed?.Invoke();
-                    }
-                });
+                        if (!IsScanned(choice.Drive, choice.Removable))
+                            throw new DriveTurnedOff();
+                        if (background && run.Urgent)
+                        {
+                            // Someone opened the program search: stop being polite about disk and CPU.
+                            NativeMethods.SetThreadPriority(NativeMethods.GetCurrentThread(), NativeMethods.THREAD_MODE_BACKGROUND_END);
+                            Thread.CurrentThread.Priority = ThreadPriority.Normal;
+                            background = false;
+                        }
+                        // A background scan waits while the PC is short on memory.
+                        while (!run.Urgent && MemoryGuard.LoadPercent >= MemoryGuard.TightPercent)
+                        {
+                            cancel.WaitHandle.WaitOne(TimeSpan.FromSeconds(2));
+                            cancel.ThrowIfCancellationRequested();
+                        }
+                        if (sinceReport.Elapsed > ReportEvery)
+                        {
+                            sinceReport.Restart();
+                            Changed?.Invoke();
+                        }
+                    });
+                }
+                catch (DriveTurnedOff)
+                {
+                    // Turned off in the tray menu while being scanned: move on to the next drive.
+                }
+                catch (IOException)
+                {
+                    // Unplugged or ejected while being scanned.
+                }
             }
             lock (_gate)
             {
                 if (_run == run)
                 {
                     _ready = run.Found;
-                    _readyAt = DateTime.UtcNow;
+                    // A drive turned on mid-scan was missed, so this list is already out of date.
+                    _readyAt = run.Redo ? DateTime.MinValue : DateTime.UtcNow;
                     _run = null;
+                    again = run.Redo && (KeepReady || run.Urgent);
                 }
             }
         }
@@ -177,19 +282,17 @@ internal sealed class ProgramCatalog : IDisposable
             GiveMemoryBack();
             Changed?.Invoke();
         }
+        if (again)
+            StartScan(run.Urgent);
     }
 
-    /// <summary>Other drives first: they hold the programs Windows lost track of after a reinstall.</summary>
-    private static IEnumerable<string> FixedDrives()
-    {
-        var system = Path.GetPathRoot(Environment.SystemDirectory) ?? "";
-        return DriveInfo.GetDrives()
-            .Where(d => d.DriveType == DriveType.Fixed && d.IsReady)
-            .Select(d => d.RootDirectory.FullName)
-            .OrderBy(root => string.Equals(root, system, StringComparison.OrdinalIgnoreCase))
-            .ThenBy(root => root, StringComparer.OrdinalIgnoreCase)
+    /// <summary>The drives turned on, other drives first: they hold the programs Windows lost track of after a reinstall.</summary>
+    private List<DriveChoice> DrivesToScan() =>
+        Drives()
+            .Where(d => d.Scan)
+            .OrderBy(d => d.System)
+            .ThenBy(d => d.Drive, StringComparer.Ordinal)
             .ToList();
-    }
 
     private void CheckMemory()
     {

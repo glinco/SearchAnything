@@ -71,12 +71,14 @@ public partial class App : Application
             StartWithWindows.Set(true);
 
         _ocr = OcrService.CreateAll();
-        _programs = new ProgramCatalog(_settings.KeepProgramListReady);
+        _programs = new ProgramCatalog(_settings.KeepProgramListReady, _settings.ScanDrives);
         _tray = new TrayIcon(
             onSearch: () => ToggleOverlay(fromTray: true),
             onChangeHotkey: ChangeHotkey,
             onStartWithWindowsChanged: StartWithWindows.Set,
             onKeepProgramsChanged: KeepProgramsReady,
+            listDrives: () => _programs!.Drives(),
+            onDriveChanged: ScanDrive,
             onExit: Shutdown);
         _tray.SetHotkeyText(_currentHotkey.ToString());
         _tray.SetStartWithWindows(StartWithWindows.IsEnabled);
@@ -163,6 +165,15 @@ public partial class App : Application
         _settings.KeepProgramListReady = keep;
         _settings.Save();
         _programs?.SetKeepReady(keep);
+    }
+
+    private void ScanDrive(string drive, bool scan)
+    {
+        if (_programs == null)
+            return;
+        _programs.SetDriveScanned(drive, scan);
+        _settings.ScanDrives = _programs.DriveChoices();
+        _settings.Save();
     }
 
     /// <summary>Lets a second launch of the .exe tell this one to say "already running".</summary>

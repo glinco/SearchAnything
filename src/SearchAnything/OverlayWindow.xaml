@@ -59,6 +59,8 @@
                         </Button.Template>
                     </Button>
                 </StackPanel>
+                <!-- One chip per drive with matches, to narrow the results to one drive. Filled in code. -->
+                <WrapPanel x:Name="DriveChips" Visibility="Collapsed" Margin="26,8,0,0"/>
                 <!-- Program results, filled in code. As wide as the bar so long paths are trimmed, not widening it. -->
                 <StackPanel x:Name="ProgramList" Visibility="Collapsed" Margin="0,8,0,0" HorizontalAlignment="Left"
                             Width="{Binding ActualWidth, ElementName=Bar}"/>

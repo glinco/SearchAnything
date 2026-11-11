@@ -18,6 +18,9 @@ internal sealed class ProgramEntry
     /// <summary>The first three path parts ("E:\Games\Hollow Knight"): one install, for grouping its .exe files.</summary>
     internal string Install { get; }
 
+    /// <summary>"E:", for the drive chips and the drives the user chose to scan.</summary>
+    internal string Drive { get; }
+
     // Folded once here, so a keystroke doesn't refold thousands of names.
     internal string FoldedName { get; }
     internal string FoldedProduct { get; }
@@ -38,11 +41,16 @@ internal sealed class ProgramEntry
         Size = size;
         Described = described;
         Install = string.Join('\\', path.Split('\\').Take(3));
+        Drive = DriveOf(path);
         FoldedName = SearchIndex.Fold(name);
         FoldedProduct = SearchIndex.Fold(product ?? "");
         FoldedFile = SearchIndex.Fold(System.IO.Path.GetFileNameWithoutExtension(path));
         FoldedFolder = SearchIndex.Fold(LastFolders(path));
     }
+
+    /// <summary>"e:\Games\x.exe" or "E:\" → "E:"; empty for paths without a drive letter.</summary>
+    internal static string DriveOf(string path) =>
+        path.Length >= 2 && path[1] == ':' ? path[..2].ToUpperInvariant() : "";
 
     /// <summary>
     /// Names the program from its version info ("Microsoft Word"), not its file name ("WINWORD").
@@ -183,10 +191,19 @@ internal static class ProgramScanner
     }
 }
 
+/// <summary>How many programs matched on one drive.</summary>
+internal sealed record DriveCount(string Drive, int Count);
+
 /// <summary>Accent- and case-insensitive program search, best matches first.</summary>
 internal static class ProgramMatcher
 {
-    public static List<ProgramEntry> Find(IEnumerable<ProgramEntry> programs, string query, int limit, out int total)
+    public static List<ProgramEntry> Find(IEnumerable<ProgramEntry> programs, string query, int limit, out int total) =>
+        Find(programs, query, limit, drive: null, out total, out _);
+
+    /// <param name="drive">Only programs on this drive ("D:"), or null for all of them.</param>
+    /// <param name="drives">Matches on each drive, counted before <paramref name="drive"/> narrows them.</param>
+    public static List<ProgramEntry> Find(IEnumerable<ProgramEntry> programs, string query, int limit, string? drive,
+        out int total, out List<DriveCount> drives)
     {
         var words = SearchIndex.Fold(query).Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries);
         var folded = string.Join(' ', words);
@@ -202,6 +219,13 @@ internal static class ProgramMatcher
             .GroupBy(h => (h.Program.FoldedName, h.Program.Install.ToLowerInvariant()))
             .Select(g => g.OrderBy(h => h.Score).ThenBy(h => h.Program.LaunchRank()).First())
             .ToList();
+        drives = best
+            .GroupBy(h => h.Program.Drive)
+            .Select(g => new DriveCount(g.Key, g.Count()))
+            .OrderBy(d => d.Drive, StringComparer.Ordinal)
+            .ToList();
+        if (drive != null)
+            best = best.Where(h => string.Equals(h.Program.Drive, drive, StringComparison.OrdinalIgnoreCase)).ToList();
         total = best.Count;
         // Within a tier, real apps before tools: named by version info, then bigger first ("Microsoft Word"
         // before "Word Converter", GIMP before gimptool).
